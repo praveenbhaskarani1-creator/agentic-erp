@@ -27,6 +27,11 @@ lambda/*.zip
 # Local test files
 *.log
 /tmp/
+test_*.txt
+*_out.txt
+*_out_*.txt
+logs.txt
+sample_upload_test*.csv
 
 # IDE
 .vscode/
