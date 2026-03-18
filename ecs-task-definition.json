@@ -1,0 +1,83 @@
+{
+  "family": "agentic-erp-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::241030170015:role/ecsTaskExecutionRole",
+  "taskRoleArn":      "arn:aws:iam::241030170015:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name":      "agentic-erp-container",
+      "image":     "241030170015.dkr.ecr.us-east-1.amazonaws.com/agentic-erp-agent:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol":      "tcp"
+        }
+      ],
+      "secrets": [
+        {
+          "name":      "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/rds-pgvector:db_password::"
+        },
+        {
+          "name":      "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/rds-pgvector:db_host::"
+        },
+        {
+          "name":      "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/rds-pgvector:db_name::"
+        },
+        {
+          "name":      "DB_USER",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/rds-pgvector:db_username::"
+        },
+        {
+          "name":      "AWS_ACCESS_KEY_ID",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/api-keys:AWS_ACCESS_KEY_ID::"
+        },
+        {
+          "name":      "AWS_SECRET_ACCESS_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/api-keys:AWS_SECRET_ACCESS_KEY::"
+        },
+        {
+          "name":      "LANGSMITH_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:241030170015:secret:agentic-erp/api-keys:langsmith_api_key::"
+        }
+      ],
+      "environment": [
+        {"name": "DB_PORT",              "value": "5432"},
+        {"name": "AWS_REGION",           "value": "us-east-1"},
+        {"name": "AWS_ACCOUNT_ID",       "value": "241030170015"},
+        {"name": "BEDROCK_MODEL_SONNET", "value": "us.anthropic.claude-3-5-haiku-20241022-v1:0"},
+        {"name": "BEDROCK_MODEL_HAIKU",  "value": "us.anthropic.claude-3-5-haiku-20241022-v1:0"},
+        {"name": "BEDROCK_EMBED_MODEL",  "value": "amazon.titan-embed-text-v2:0"},
+        {"name": "S3_DOCS_BUCKET",       "value": "agentic-erp-docs-241030170015"},
+        {"name": "S3_ARTIFACTS_BUCKET",  "value": "agentic-erp-artifacts-241030170015"},
+        {"name": "RDS_SECRET_NAME",      "value": "agentic-erp/rds-pgvector"},
+        {"name": "API_KEYS_SECRET_NAME", "value": "agentic-erp/api-keys"},
+        {"name": "ORACLE_SECRET_NAME",   "value": "agentic-erp/oracle-fusion-dev"},
+        {"name": "LANGCHAIN_TRACING_V2", "value": "true"},
+        {"name": "LANGCHAIN_PROJECT",    "value": "agentic-erp-dev"},
+        {"name": "APP_ENV",              "value": "production"}
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group":         "/ecs/agentic-erp",
+          "awslogs-region":        "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command":     ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\" || exit 1"],
+        "interval":    30,
+        "timeout":     10,
+        "retries":     3,
+        "startPeriod": 30
+      }
+    }
+  ]
+}

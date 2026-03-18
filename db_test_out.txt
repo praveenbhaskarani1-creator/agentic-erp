@@ -1,0 +1,30 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\PraveenBhaskarani\Documents\agentic-erp\venv312\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\PraveenBhaskarani\Documents\agentic-erp
+plugins: anyio-4.12.1, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=None
+collecting ... collected 20 items
+
+tests/test_db_connection.py::test_can_connect_to_rds PASSED              [  5%]
+tests/test_db_connection.py::test_health_check_returns_ok PASSED         [ 10%]
+tests/test_db_connection.py::test_connected_to_correct_database PASSED   [ 15%]
+tests/test_db_connection.py::test_connected_as_correct_user PASSED       [ 20%]
+tests/test_db_connection.py::test_fusion_time_entries_table_exists PASSED [ 25%]
+tests/test_db_connection.py::test_all_5_columns_exist PASSED             [ 30%]
+tests/test_db_connection.py::test_table_has_119_rows PASSED              [ 35%]
+tests/test_db_connection.py::test_table_has_rows_with_data PASSED        [ 40%]
+tests/test_db_connection.py::test_query_all_entries PASSED               [ 45%]
+tests/test_db_connection.py::test_query_total_count PASSED               [ 50%]
+tests/test_db_connection.py::test_query_blank_memo_returns_rows PASSED   [ 55%]
+tests/test_db_connection.py::test_query_blank_memo_columns PASSED        [ 60%]
+tests/test_db_connection.py::test_query_last_7_days_date_filter PASSED   [ 65%]
+tests/test_db_connection.py::test_query_non_erp_memo_filter PASSED       [ 70%]
+tests/test_db_connection.py::test_all_rows_have_employee PASSED          [ 75%]
+tests/test_db_connection.py::test_all_rows_have_date PASSED              [ 80%]
+tests/test_db_connection.py::test_all_rows_have_positive_hours PASSED    [ 85%]
+tests/test_db_connection.py::test_hours_are_reasonable PASSED            [ 90%]
+tests/test_db_connection.py::test_multiple_concurrent_queries PASSED     [ 95%]
+tests/test_db_connection.py::test_connection_returns_to_pool_after_use PASSED [100%]
+
+============================= 20 passed in 14.56s =============================

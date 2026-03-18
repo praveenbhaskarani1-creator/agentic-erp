@@ -1,0 +1,2155 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\PraveenBhaskarani\Documents\agentic-erp\venv312\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\PraveenBhaskarani\Documents\agentic-erp
+plugins: anyio-4.12.1, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=None
+collecting ... collected 110 items
+
+tests/test_config.py::test_settings_loads_without_error PASSED           [  0%]
+tests/test_config.py::test_app_name_is_set PASSED                        [  1%]
+tests/test_config.py::test_app_version_is_set PASSED                     [  2%]
+tests/test_config.py::test_db_url_constructed_correctly PASSED           [  3%]
+tests/test_config.py::test_db_url_contains_password PASSED               [  4%]
+tests/test_config.py::test_db_port_is_integer PASSED                     [  5%]
+tests/test_config.py::test_db_pool_size_default PASSED                   [  6%]
+tests/test_config.py::test_db_max_overflow_default PASSED                [  7%]
+tests/test_config.py::test_aws_region_is_set PASSED                      [  8%]
+tests/test_config.py::test_bedrock_sonnet_model_id PASSED                [  9%]
+tests/test_config.py::test_bedrock_haiku_model_id PASSED                 [ 10%]
+tests/test_config.py::test_bedrock_embed_model_id PASSED                 [ 10%]
+tests/test_config.py::test_bedrock_temperature_is_zero PASSED            [ 11%]
+tests/test_config.py::test_bedrock_max_tokens PASSED                     [ 12%]
+tests/test_config.py::test_s3_docs_bucket PASSED                         [ 13%]
+tests/test_config.py::test_s3_artifacts_bucket PASSED                    [ 14%]
+tests/test_config.py::test_is_development_flag PASSED                    [ 15%]
+tests/test_config.py::test_is_production_flag PASSED                     [ 16%]
+tests/test_config.py::test_summary_hides_password PASSED                 [ 17%]
+tests/test_config.py::test_summary_shows_safe_fields PASSED              [ 18%]
+tests/test_config.py::test_summary_shows_bedrock_models PASSED           [ 19%]
+tests/test_config.py::test_rds_secret_name PASSED                        [ 20%]
+tests/test_config.py::test_api_keys_secret_name PASSED                   [ 20%]
+tests/test_config.py::test_oracle_secret_name PASSED                     [ 21%]
+tests/test_config.py::test_load_rds_secret_noop_in_dev PASSED            [ 22%]
+tests/test_db_connection.py::test_can_connect_to_rds FAILED              [ 23%]
+tests/test_db_connection.py::test_health_check_returns_ok FAILED         [ 24%]
+tests/test_db_connection.py::test_connected_to_correct_database FAILED   [ 25%]
+tests/test_db_connection.py::test_connected_as_correct_user FAILED       [ 26%]
+tests/test_db_connection.py::test_fusion_time_entries_table_exists FAILED [ 27%]
+tests/test_db_connection.py::test_all_5_columns_exist FAILED             [ 28%]
+tests/test_db_connection.py::test_table_has_119_rows FAILED              [ 29%]
+tests/test_db_connection.py::test_table_has_rows_with_data FAILED        [ 30%]
+tests/test_db_connection.py::test_query_all_entries FAILED               [ 30%]
+tests/test_db_connection.py::test_query_total_count FAILED               [ 31%]
+tests/test_db_connection.py::test_query_blank_memo_returns_rows FAILED   [ 32%]
+tests/test_db_connection.py::test_query_blank_memo_columns FAILED        [ 33%]
+tests/test_db_connection.py::test_query_last_7_days_date_filter FAILED   [ 34%]
+tests/test_db_connection.py::test_query_non_erp_memo_filter FAILED       [ 35%]
+tests/test_db_connection.py::test_all_rows_have_employee FAILED          [ 36%]
+tests/test_db_connection.py::test_all_rows_have_date FAILED              [ 37%]
+tests/test_db_connection.py::test_all_rows_have_positive_hours FAILED    [ 38%]
+tests/test_db_connection.py::test_hours_are_reasonable FAILED            [ 39%]
+tests/test_db_connection.py::test_multiple_concurrent_queries FAILED     [ 40%]
+tests/test_db_connection.py::test_connection_returns_to_pool_after_use FAILED [ 40%]
+tests/test_queries.py::test_all_5_queries_exist PASSED                   [ 41%]
+tests/test_queries.py::test_exactly_5_queries_defined PASSED             [ 42%]
+tests/test_queries.py::test_all_queries_are_querydef_instances PASSED    [ 43%]
+tests/test_queries.py::test_all_queries_have_name PASSED                 [ 44%]
+tests/test_queries.py::test_all_queries_have_description PASSED          [ 45%]
+tests/test_queries.py::test_all_queries_have_sql PASSED                  [ 46%]
+tests/test_queries.py::test_all_queries_have_sample_questions PASSED     [ 47%]
+tests/test_queries.py::test_all_queries_have_returns_columns PASSED      [ 48%]
+tests/test_queries.py::test_all_entries_sql PASSED                       [ 49%]
+tests/test_queries.py::test_total_count_sql PASSED                       [ 50%]
+tests/test_queries.py::test_blank_memo_sql PASSED                        [ 50%]
+tests/test_queries.py::test_last_7_days_sql PASSED                       [ 51%]
+tests/test_queries.py::test_non_erp_memo_sql PASSED                      [ 52%]
+tests/test_queries.py::test_no_query_uses_delete_or_drop PASSED          [ 53%]
+tests/test_queries.py::test_all_queries_use_correct_table PASSED         [ 54%]
+tests/test_queries.py::test_total_count_returns_single_column PASSED     [ 55%]
+tests/test_queries.py::test_row_queries_return_core_columns PASSED       [ 56%]
+tests/test_queries.py::test_get_query_returns_correct_querydef PASSED    [ 57%]
+tests/test_queries.py::test_get_query_raises_for_unknown_name PASSED     [ 58%]
+tests/test_queries.py::test_get_query_error_lists_available_queries PASSED [ 59%]
+tests/test_queries.py::test_get_all_names_returns_list PASSED            [ 60%]
+tests/test_queries.py::test_get_all_names_contains_all_5 PASSED          [ 60%]
+tests/test_queries.py::test_get_query_catalog_returns_list PASSED        [ 61%]
+tests/test_queries.py::test_catalog_each_entry_has_required_keys PASSED  [ 62%]
+tests/test_queries.py::test_catalog_does_not_expose_raw_sql PASSED       [ 63%]
+tests/test_queries.py::test_find_query_blank_memo_by_keyword PASSED      [ 64%]
+tests/test_queries.py::test_find_query_last_7_days_by_keyword PASSED     [ 65%]
+tests/test_queries.py::test_find_query_erp_by_keyword PASSED             [ 66%]
+tests/test_queries.py::test_find_query_returns_none_for_unknown PASSED   [ 67%]
+tests/test_queries.py::test_find_query_case_insensitive PASSED           [ 68%]
+tests/test_sql_tool.py::TestSerializeRow::test_converts_date_to_isoformat PASSED [ 69%]
+tests/test_sql_tool.py::TestSerializeRow::test_converts_datetime_to_isoformat PASSED [ 70%]
+tests/test_sql_tool.py::TestSerializeRow::test_passes_through_strings PASSED [ 70%]
+tests/test_sql_tool.py::TestSerializeRow::test_passes_through_none PASSED [ 71%]
+tests/test_sql_tool.py::TestSerializeRow::test_passes_through_integers PASSED [ 72%]
+tests/test_sql_tool.py::TestResponseHelpers::test_success_response_structure PASSED [ 73%]
+tests/test_sql_tool.py::TestResponseHelpers::test_success_pluralises_correctly PASSED [ 74%]
+tests/test_sql_tool.py::TestResponseHelpers::test_success_singular PASSED [ 75%]
+tests/test_sql_tool.py::TestResponseHelpers::test_empty_response_structure PASSED [ 76%]
+tests/test_sql_tool.py::TestResponseHelpers::test_error_response_structure PASSED [ 77%]
+tests/test_sql_tool.py::TestSQLToolUnknownQuery::test_unknown_query_returns_error_status PASSED [ 78%]
+tests/test_sql_tool.py::TestSQLToolUnknownQuery::test_unknown_query_error_message_helpful PASSED [ 79%]
+tests/test_sql_tool.py::TestSQLToolUnknownQuery::test_unknown_query_does_not_raise PASSED [ 80%]
+tests/test_sql_tool.py::TestSQLToolUnknownQuery::test_empty_string_query_returns_error PASSED [ 80%]
+tests/test_sql_tool.py::TestSQLToolUnknownQuery::test_result_always_has_required_keys PASSED [ 81%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_returns_success FAILED [ 82%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_returns_119_rows FAILED [ 83%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_rows_are_dicts PASSED [ 84%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_rows_have_core_columns PASSED [ 85%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_dates_are_strings PASSED [ 86%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_returns_success FAILED [ 87%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_returns_119 FAILED [ 88%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_has_1_row FAILED [ 89%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_blank_memo_returns_success FAILED [ 90%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_blank_memo_all_rows_have_null_memo PASSED [ 90%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_blank_memo_message_mentions_count PASSED [ 91%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_last_7_days_returns_valid_status FAILED [ 92%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_last_7_days_dates_within_range PASSED [ 93%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_non_erp_memo_returns_success FAILED [ 94%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_non_erp_memo_no_erp_prefix PASSED [ 95%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_run_all_returns_all_5_queries PASSED [ 96%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_run_all_each_result_has_status PASSED [ 97%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_summary_total_count FAILED [ 98%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_summary_blank_memo PASSED [ 99%]
+tests/test_sql_tool.py::TestSQLToolIntegration::test_summary_unknown_query PASSED [100%]
+
+================================== FAILURES ===================================
+___________________________ test_can_connect_to_rds ___________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:72: in test_can_connect_to_rds
+    result = db.execute(text("SELECT 1 AS ping")).fetchone()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+________________________ test_health_check_returns_ok _________________________
+tests\test_db_connection.py:79: in test_health_check_returns_ok
+    assert result["status"] == "ok"
+E   AssertionError: assert 'error' == 'ok'
+E     
+E     - ok
+E     + error
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:115 [db] Health check failed: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_____________________ test_connected_to_correct_database ______________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:86: in test_connected_to_correct_database
+    result = db.execute(text("SELECT current_database()")).fetchone()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_______________________ test_connected_as_correct_user ________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:93: in test_connected_as_correct_user
+    result = db.execute(text("SELECT current_user")).fetchone()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+____________________ test_fusion_time_entries_table_exists ____________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:104: in test_fusion_time_entries_table_exists
+    result = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+__________________________ test_all_5_columns_exist ___________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:119: in test_all_5_columns_exist
+    result = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________________________ test_table_has_119_rows ___________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:145: in test_table_has_119_rows
+    count = db.execute(text(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+________________________ test_table_has_rows_with_data ________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:154: in test_table_has_rows_with_data
+    rows = db.execute(text(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________________________ test_query_all_entries ____________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:169: in test_query_all_entries
+    rows = db.execute(text(q.sql)).fetchall()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________________________ test_query_total_count ____________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:181: in test_query_total_count
+    result = db.execute(text(q.sql)).fetchone()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_____________________ test_query_blank_memo_returns_rows ______________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:193: in test_query_blank_memo_returns_rows
+    rows = db.execute(text(q.sql)).mappings().fetchall()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+________________________ test_query_blank_memo_columns ________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:206: in test_query_blank_memo_columns
+    rows = db.execute(text(q.sql)).mappings().fetchall()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_____________________ test_query_last_7_days_date_filter ______________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:224: in test_query_last_7_days_date_filter
+    rows = db.execute(text(q.sql)).mappings().fetchall()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_______________________ test_query_non_erp_memo_filter ________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:242: in test_query_non_erp_memo_filter
+    rows = db.execute(text(q.sql)).mappings().fetchall()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_________________________ test_all_rows_have_employee _________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:260: in test_all_rows_have_employee
+    nulls = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________________________ test_all_rows_have_date ___________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:271: in test_all_rows_have_date
+    nulls = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+______________________ test_all_rows_have_positive_hours ______________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:282: in test_all_rows_have_positive_hours
+    bad = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+__________________________ test_hours_are_reasonable __________________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:293: in test_hours_are_reasonable
+    bad = db.execute(text("""
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+______________________ test_multiple_concurrent_queries _______________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:312: in test_multiple_concurrent_queries
+    result = db.execute(text(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+__________________ test_connection_returns_to_pool_after_use __________________
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   psycopg2.OperationalError: connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+The above exception was the direct cause of the following exception:
+tests\test_db_connection.py:326: in test_connection_returns_to_pool_after_use
+    db.execute(text("SELECT 1")).fetchone()
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2362: in execute
+    return self._execute_internal(
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2237: in _execute_internal
+    conn = self._connection_for_bind(bind)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:2106: in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+<string>:2: in _connection_for_bind
+    ???
+venv312\Lib\site-packages\sqlalchemy\orm\state_changes.py:139: in _go
+    ret_value = fn(self, *arg, **kw)
+venv312\Lib\site-packages\sqlalchemy\orm\session.py:1189: in _connection_for_bind
+    conn = bind.connect()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3278: in connect
+    return self._connection_cls(self)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:148: in __init__
+    Connection._handle_dbapi_exception_noconnection(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2442: in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:146: in __init__
+    self._dbapi_connection = engine.raw_connection()
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3302: in raw_connection
+    return self.pool.connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:449: in connect
+    return _ConnectionFairy._checkout(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:1263: in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:712: in checkout
+    rec = pool._do_get()
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:179: in _do_get
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\impl.py:177: in _do_get
+    return self._create_connection()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:390: in _create_connection
+    return _ConnectionRecord(self)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:674: in __init__
+    self.__connect()
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:900: in __connect
+    with util.safe_reraise():
+venv312\Lib\site-packages\sqlalchemy\util\langhelpers.py:146: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+venv312\Lib\site-packages\sqlalchemy\pool\base.py:896: in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+venv312\Lib\site-packages\sqlalchemy\engine\create.py:643: in connect
+    return dialect.connect(*cargs, **cparams)
+venv312\Lib\site-packages\sqlalchemy\engine\default.py:621: in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+venv312\Lib\site-packages\psycopg2\__init__.py:122: in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+E   sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+E   connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+E   
+E   (Background on this error at: https://sqlalche.me/e/20/e3q8)
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________ TestSQLToolIntegration.test_all_entries_returns_success ___________
+tests\test_sql_tool.py:187: in test_all_entries_returns_success
+    assert result["status"] == "success"
+E   AssertionError: assert 'error' == 'success'
+E     
+E     - success
+E     + error
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'all_entries': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+__________ TestSQLToolIntegration.test_all_entries_returns_119_rows ___________
+tests\test_sql_tool.py:191: in test_all_entries_returns_119_rows
+    assert result["row_count"] == 119, \
+E   AssertionError: Expected 119 rows, got 0
+E   assert 0 == 119
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'all_entries': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________ TestSQLToolIntegration.test_total_count_returns_success ___________
+tests\test_sql_tool.py:216: in test_total_count_returns_success
+    assert result["status"] == "success"
+E   AssertionError: assert 'error' == 'success'
+E     
+E     - success
+E     + error
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'total_count': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_____________ TestSQLToolIntegration.test_total_count_returns_119 _____________
+tests\test_sql_tool.py:220: in test_total_count_returns_119
+    assert result["rows"][0]["total_records"] == 119
+E   IndexError: list index out of range
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'total_count': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+______________ TestSQLToolIntegration.test_total_count_has_1_row ______________
+tests\test_sql_tool.py:224: in test_total_count_has_1_row
+    assert result["row_count"] == 1
+E   assert 0 == 1
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'total_count': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+___________ TestSQLToolIntegration.test_blank_memo_returns_success ____________
+tests\test_sql_tool.py:230: in test_blank_memo_returns_success
+    assert result["status"] in ("success", "empty")
+E   AssertionError: assert 'error' in ('success', 'empty')
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'blank_memo': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+________ TestSQLToolIntegration.test_last_7_days_returns_valid_status _________
+tests\test_sql_tool.py:247: in test_last_7_days_returns_valid_status
+    assert result["status"] in ("success", "empty")
+E   AssertionError: assert 'error' in ('success', 'empty')
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'last_7_days': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+__________ TestSQLToolIntegration.test_non_erp_memo_returns_success ___________
+tests\test_sql_tool.py:262: in test_non_erp_memo_returns_success
+    assert result["status"] in ("success", "empty")
+E   AssertionError: assert 'error' in ('success', 'empty')
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'non_erp_memo': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+_______________ TestSQLToolIntegration.test_summary_total_count _______________
+tests\test_sql_tool.py:290: in test_summary_total_count
+    assert "119" in summary
+E   assert '119' in 'Error running total_count: Query failed: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"\nconnection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)'
+------------------------------ Captured log call ------------------------------
+ERROR    app.db.connection:connection.py:148 [db] Query error ù rolled back: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+ERROR    app.tools.sql_tool:sql_tool.py:144 [sql_tool] DB error on 'total_count': (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5433 failed: FATAL:  password authentication failed for user "pgadmin"
+connection to server at "localhost" (::1), port 5433 failed: FATAL:  no pg_hba.conf entry for host "10.0.10.246", user "pgadmin", database "agentdb", no encryption
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+============================== warnings summary ===============================
+venv312\Lib\site-packages\pydantic\_internal\_config.py:291
+  C:\Users\PraveenBhaskarani\Documents\agentic-erp\venv312\Lib\site-packages\pydantic\_internal\_config.py:291: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.9/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_db_connection.py::test_can_connect_to_rds - sqlalchemy.exc....
+FAILED tests/test_db_connection.py::test_health_check_returns_ok - AssertionE...
+FAILED tests/test_db_connection.py::test_connected_to_correct_database - sqla...
+FAILED tests/test_db_connection.py::test_connected_as_correct_user - sqlalche...
+FAILED tests/test_db_connection.py::test_fusion_time_entries_table_exists - s...
+FAILED tests/test_db_connection.py::test_all_5_columns_exist - sqlalchemy.exc...
+FAILED tests/test_db_connection.py::test_table_has_119_rows - sqlalchemy.exc....
+FAILED tests/test_db_connection.py::test_table_has_rows_with_data - sqlalchem...
+FAILED tests/test_db_connection.py::test_query_all_entries - sqlalchemy.exc.O...
+FAILED tests/test_db_connection.py::test_query_total_count - sqlalchemy.exc.O...
+FAILED tests/test_db_connection.py::test_query_blank_memo_returns_rows - sqla...
+FAILED tests/test_db_connection.py::test_query_blank_memo_columns - sqlalchem...
+FAILED tests/test_db_connection.py::test_query_last_7_days_date_filter - sqla...
+FAILED tests/test_db_connection.py::test_query_non_erp_memo_filter - sqlalche...
+FAILED tests/test_db_connection.py::test_all_rows_have_employee - sqlalchemy....
+FAILED tests/test_db_connection.py::test_all_rows_have_date - sqlalchemy.exc....
+FAILED tests/test_db_connection.py::test_all_rows_have_positive_hours - sqlal...
+FAILED tests/test_db_connection.py::test_hours_are_reasonable - sqlalchemy.ex...
+FAILED tests/test_db_connection.py::test_multiple_concurrent_queries - sqlalc...
+FAILED tests/test_db_connection.py::test_connection_returns_to_pool_after_use
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_returns_success
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_all_entries_returns_119_rows
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_returns_success
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_returns_119
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_total_count_has_1_row
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_blank_memo_returns_success
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_last_7_days_returns_valid_status
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_non_erp_memo_returns_success
+FAILED tests/test_sql_tool.py::TestSQLToolIntegration::test_summary_total_count
+================== 29 failed, 81 passed, 1 warning in 58.98s ==================

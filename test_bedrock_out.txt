@@ -1,0 +1,90 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-8.3.3, pluggy-1.6.0 -- C:\Users\PraveenBhaskarani\Documents\agentic-erp\venv312\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\PraveenBhaskarani\Documents\agentic-erp
+plugins: anyio-4.12.1, asyncio-0.24.0
+asyncio: mode=Mode.STRICT, default_loop_scope=None
+collecting ... collected 35 items / 26 deselected / 9 selected
+
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_health_check_real_bedrock FAILED [ 11%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_blank_memo FAILED [ 22%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_total_count FAILED [ 33%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_last_7_days FAILED [ 44%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_non_erp FAILED [ 55%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_out_of_scope PASSED [ 66%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_ask_returns_answer_for_blank_memo PASSED [ 77%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_ask_total_count_mentions_number FAILED [ 88%]
+tests/test_bedrock_tool.py::TestBedrockIntegration::test_haiku_faster_than_sonnet PASSED [100%]
+
+================================== FAILURES ===================================
+____________ TestBedrockIntegration.test_health_check_real_bedrock ____________
+tests\test_bedrock_tool.py:333: in test_health_check_real_bedrock
+    assert result["status"]  == "ok", \
+E   AssertionError: Bedrock health check failed: {'status': 'error', 'bedrock': 'Unable to locate credentials'}
+E   assert 'error' == 'ok'
+E     
+E     - ok
+E     + error
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: Unable to locate credentials
+____________ TestBedrockIntegration.test_detect_intent_blank_memo _____________
+tests\test_bedrock_tool.py:339: in test_detect_intent_blank_memo
+    assert result == "blank_memo", \
+E   AssertionError: Expected 'blank_memo', got 'unknown'
+E   assert 'unknown' == 'blank_memo'
+E     
+E     - blank_memo
+E     + unknown
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: Unable to locate credentials
+WARNING  app.tools.bedrock_tool:bedrock_tool.py:122 [bedrock] detect_intent failed: Unable to locate credentials
+____________ TestBedrockIntegration.test_detect_intent_total_count ____________
+tests\test_bedrock_tool.py:344: in test_detect_intent_total_count
+    assert result == "total_count", \
+E   AssertionError: Expected 'total_count', got 'unknown'
+E   assert 'unknown' == 'total_count'
+E     
+E     - total_count
+E     + unknown
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: Unable to locate credentials
+WARNING  app.tools.bedrock_tool:bedrock_tool.py:122 [bedrock] detect_intent failed: Unable to locate credentials
+____________ TestBedrockIntegration.test_detect_intent_last_7_days ____________
+tests\test_bedrock_tool.py:349: in test_detect_intent_last_7_days
+    assert result == "last_7_days", \
+E   AssertionError: Expected 'last_7_days', got 'unknown'
+E   assert 'unknown' == 'last_7_days'
+E     
+E     - last_7_days
+E     + unknown
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: Unable to locate credentials
+WARNING  app.tools.bedrock_tool:bedrock_tool.py:122 [bedrock] detect_intent failed: Unable to locate credentials
+______________ TestBedrockIntegration.test_detect_intent_non_erp ______________
+tests\test_bedrock_tool.py:354: in test_detect_intent_non_erp
+    assert result == "non_erp_memo", \
+E   AssertionError: Expected 'non_erp_memo', got 'unknown'
+E   assert 'unknown' == 'non_erp_memo'
+E     
+E     - non_erp_memo
+E     + unknown
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: Unable to locate credentials
+WARNING  app.tools.bedrock_tool:bedrock_tool.py:122 [bedrock] detect_intent failed: Unable to locate credentials
+_________ TestBedrockIntegration.test_ask_total_count_mentions_number _________
+tests\test_bedrock_tool.py:395: in test_ask_total_count_mentions_number
+    assert any(char.isdigit() for char in answer), \
+E   AssertionError: Answer should contain a number for total_count query
+E   assert False
+E    +  where False = any(<generator object TestBedrockIntegration.test_ask_total_count_mentions_number.<locals>.<genexpr> at 0x000001FFC6FF3510>)
+------------------------------ Captured log call ------------------------------
+ERROR    app.tools.bedrock_tool:bedrock_tool.py:271 [bedrock] Error calling anthropic.claude-3-5-sonnet-20241022-v2:0: Unable to locate credentials
+WARNING  app.tools.bedrock_tool:bedrock_tool.py:202 [bedrock] ask failed: Unable to locate credentials
+=========================== short test summary info ===========================
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_health_check_real_bedrock
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_blank_memo
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_total_count
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_last_7_days
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_detect_intent_non_erp
+FAILED tests/test_bedrock_tool.py::TestBedrockIntegration::test_ask_total_count_mentions_number
+================= 6 failed, 3 passed, 26 deselected in 4.59s ==================

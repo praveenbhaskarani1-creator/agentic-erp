@@ -1,0 +1,21 @@
+id,employee,date,hours,memo
+140,Tom Harris,2026-03-01,8.0,ERP-2001 Architecture Review
+141,Priya Patel,2026-03-01,7.5,ERP-2002 Data Migration
+142,Carlos Mendez,2026-03-02,6.0,
+143,Aisha Okafor,2026-03-02,8.0,ERP-2003 API Integration
+144,Wei Zhang,2026-03-03,9.0,standup and team sync
+145,Rachel Kim,2026-03-03,7.0,
+146,Nathan Brooks,2026-03-04,8.0,ERP-2004 Security Audit
+147,Fatima Al-Hassan,2026-03-04,6.5,random tasks
+148,Omar Sharif,2026-03-05,8.0,
+149,Chloe Dubois,2026-03-05,7.5,ERP-2005 Performance Testing
+150,Ivan Petrov,2026-03-06,5.0,internal meetings no project
+151,Yuki Tanaka,2026-03-06,8.0,ERP-2006 UI Development
+152,Amara Diallo,2026-03-07,8.0,
+153,Lucas Silva,2026-03-07,7.0,ERP-2007 Code Freeze
+154,Megan O'Brien,2026-03-08,6.0,ad hoc support tasks
+155,Raj Krishnamurthy,2026-03-08,8.0,ERP-2008 Release Validation
+156,Sophia Müller,2026-03-09,8.5,
+157,James Okonkwo,2026-03-09,7.0,ERP-2009 Patch Deployment
+158,Layla Hassan,2026-03-10,4.0,catchup and emails
+159,Diego Ramirez,2026-03-10,8.0,ERP-2010 Sprint Retrospective

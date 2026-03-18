@@ -1,0 +1,12 @@
+[
+    "INFO:     127.0.0.1:60278 - \"GET /health HTTP/1.1\" 200 OK",
+    "INFO:app.main:[/health] Health check",
+    "ERROR:app.tools.bedrock_tool:[bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: ValidationException: Invocation of model ID anthropic.claude-3-5-haiku-20241022-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model.",
+    "INFO:     127.0.0.1:47568 - \"GET /health HTTP/1.1\" 200 OK",
+    "INFO:app.main:[/health] Health check",
+    "ERROR:app.tools.bedrock_tool:[bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: ValidationException: Invocation of model ID anthropic.claude-3-5-haiku-20241022-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model.",
+    "INFO:     127.0.0.1:46682 - \"GET /health HTTP/1.1\" 200 OK",
+    "INFO:app.main:[/health] Health check",
+    "ERROR:app.tools.bedrock_tool:[bedrock] Error calling anthropic.claude-3-5-haiku-20241022-v1:0: ValidationException: Invocation of model ID anthropic.claude-3-5-haiku-20241022-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model.",
+    "INFO:     127.0.0.1:34218 - \"GET /health HTTP/1.1\" 200 OK"
+]

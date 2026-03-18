@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+venv312/
+.venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+secrets.json
+
+# Lambda build artifacts
+lambda/package/
+lambda/*.zip
+
+# Local test files
+*.log
+/tmp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/
+
+# Generated docs
+*.docx
+generate_doc.py
+architecture.html

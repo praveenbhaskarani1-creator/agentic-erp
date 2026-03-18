@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s --connect-timeout 5 http://localhost:8501 -o /dev/null -w \"%{http_code}\")",
+      "Bash(source venv312/Scripts/activate)",
+      "Bash(source venv/Scripts/activate)",
+      "Bash(streamlit --version)",
+      "Bash(python -m streamlit --version)",
+      "Bash(pip list:*)",
+      "Bash(aws ec2:*)",
+      "Bash(ssh -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no -o ConnectTimeout=10 ec2-user@98.92.220.36 \"echo connected && python3 --version && pip3 --version\")",
+      "Bash(ssh -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no ec2-user@98.92.220.36 \"pip3 install --user streamlit==1.41.0 requests==2.32.3 2>&1 | tail -5\")",
+      "Bash(ssh -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no ec2-user@98.92.220.36 \"pkill -f streamlit 2>/dev/null; sleep 1; nohup python3 -m streamlit run ~/frontend/app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true > ~/streamlit.log 2>&1 & echo PID:$!\")",
+      "Bash(curl -s --connect-timeout 8 http://98.92.220.36:8501 -o /dev/null -w \"%{http_code}\")",
+      "Bash(ssh -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no ec2-user@98.92.220.36 \"cat ~/streamlit.log\")",
+      "Bash(curl -s --connect-timeout 8 http://98.92.220.36:8501/healthz)",
+      "Bash(scp -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no frontend/app.py ec2-user@98.92.220.36:~/frontend/app.py)"
+    ]
+  }
+}

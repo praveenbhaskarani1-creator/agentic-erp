@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -i:*)",
+      "Bash(start \"c:\\\\Users\\\\PraveenBhaskarani\\\\Documents\\\\agentic-erp\\\\architecture.html\")"
+    ]
+  }
+}
