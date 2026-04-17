@@ -358,19 +358,32 @@ def _render_ai_tab(db, current_run_id):
     if not db:
         st.warning("Oracle ADW not connected — results cannot be fetched.")
 
-    # Suggested questions
-    with st.expander("Suggested questions", expanded=False):
-        for q in QUERIES:
-            st.markdown(f'<span class="badge badge-gray">{q.name}</span> <span style="font-size:.8rem;color:#A0A0B0;">{q.description}</span>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="border:2px solid #0D7377; border-radius:10px; padding:1.25rem 1.5rem 1rem 1.5rem; background:#0A1628; margin-bottom:.75rem;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:.75rem; color:#0D7377;
+           text-transform:uppercase; letter-spacing:.12em; margin-bottom:.6rem;">
+        🤖 &nbsp; Ask the AI — timesheet validation results
+      </div>
+    """, unsafe_allow_html=True)
 
-    # Question input
     question = st.text_input(
-        "Ask a question about the validation results",
-        placeholder="e.g. Who has the most errors?  |  Show entries with no memo  |  Format issues",
+        label="",
+        placeholder="e.g.  Who has the most errors?   |   Show entries with no memo   |   Format issues",
         key="ai_question",
+        label_visibility="collapsed",
     )
 
-    if st.button("Ask", key="ai_ask_btn") and question.strip():
+    col_ask, col_hint = st.columns([1, 4])
+    with col_ask:
+        ask_clicked = st.button("Ask", key="ai_ask_btn", use_container_width=True)
+    with col_hint:
+        with st.expander("Suggested questions", expanded=False):
+            for q in QUERIES:
+                st.markdown(f'<span class="badge badge-gray">{q.name}</span> <span style="font-size:.78rem;color:#A0A0B0;">{q.description}</span>', unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if ask_clicked and question.strip():
         sql, _ = get_answer(question.strip(), run_id, groq_api_key=groq_key or None)
 
         if db:
@@ -605,26 +618,4 @@ else:
 
 # ── AI Assistant — always visible ────────────────────────────────────────────
 st.markdown("<br>", unsafe_allow_html=True)
-st.markdown("""
-<div style="
-    background: linear-gradient(135deg, #0D1F2D 0%, #0A1628 100%);
-    border: 1px solid #0D7377;
-    border-left: 4px solid #0D7377;
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem 0.5rem 1.5rem;
-    margin-top: 0.5rem;
-">
-  <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.75rem;">
-    <span style="font-size:1.2rem;">🤖</span>
-    <span style="font-family:'IBM Plex Mono',monospace; font-size:.9rem; font-weight:600;
-          color:#0D7377; text-transform:uppercase; letter-spacing:.1em;">AI Assistant</span>
-    <span style="font-family:'IBM Plex Mono',monospace; font-size:.68rem; color:#404060;
-          margin-left:auto;">Ask anything about the validation results</span>
-  </div>
-</div>
-""", unsafe_allow_html=True)
-
-with st.container():
-    st.markdown('<div style="background:#0A1628;border:1px solid #0D7377;border-top:none;border-radius:0 0 8px 8px;padding:1rem 1.5rem 1.25rem 1.5rem;">', unsafe_allow_html=True)
-    _render_ai_tab(get_db(), st.session_state.run_id)
-    st.markdown('</div>', unsafe_allow_html=True)
+_render_ai_tab(get_db(), st.session_state.run_id)
