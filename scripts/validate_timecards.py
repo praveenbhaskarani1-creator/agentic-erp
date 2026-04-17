@@ -178,22 +178,28 @@ def load_jira_lookups(jira_path: str):
 # From transcript: filter by PM name + Department (EA-OR), skip Canada/EPM/DBA
 # ---------------------------------------------------------------------------
 
-# Project Managers whose rows we audit (from meeting transcript + data analysis)
+# PMs included for ALL their rows (from BIP report filter screenshot)
 AUDIT_PROJECT_MANAGERS = {
     'Meine, Laura',
-    'Gadia, Dhiraj',
     'Monahan, Maureen',
     'Tounkara, Youssouf',
     'Barker, Sherrie',
-    'Feldman, Michail',
     'Cox, Alison',
 }
 
-# Departments we include (EA-OR prefix = Enterprise Applications - Oracle)
-AUDIT_DEPT_PREFIX = 'EA-OR'
+# Dhiraj is included ONLY for this specific department
+DHIRAJ_PM_NAME  = 'Gadia, Dhiraj'
+DHIRAJ_DEPT     = 'EA-OR Managed Services OFA'
+
+# Special project always included regardless of PM
+SPECIAL_PROJECTS = {
+    'OPUS HOLDING LLC-Oracle EPM Support-1003.0',
+}
+
+# Employees to exclude from results (even if their PM is in scope)
+EXCLUDE_EMPLOYEES = ('Alison', 'Bharath')
 
 # Shared/internal project prefixes — skip project comparison for these
-# (Alison explicitly excludes SHNBADM from BAD comparison review)
 SHARED_PROJECT_PREFIXES = ('SHNBADM', 'OFAINT', 'GOLD')
 
 # Projects where audit does not apply (Yusuf handles separately per transcript)
@@ -202,18 +208,36 @@ SKIP_PROJECT_PREFIXES = ('PPS',)
 
 def should_include_row(row, pm_filter: set = None) -> bool:
     """
-    Replicates Alison's manual filter process.
-    pm_filter: if provided, only include rows where PM is in this set.
-               Defaults to AUDIT_PROJECT_MANAGERS.
+    Replicates the exact Fusion BIP report filter (from filter screenshot):
+      - Include if PM in {Laura, Sherrie, Youssouf, Maureen, Alison}
+      - Include if PM = Dhiraj AND dept = EA-OR Managed Services OFA
+      - Include if project name = OPUS HOLDING LLC-Oracle EPM Support-1003.0
+      - Exclude if employee name contains Alison or Bharath
+    pm_filter: UI override — if provided, replaces AUDIT_PROJECT_MANAGERS.
     """
-    allowed_pms = pm_filter if pm_filter is not None else AUDIT_PROJECT_MANAGERS
-    pm   = str(row[F_PM] or '').strip()
-    dept = str(row[F_DEPT] or '').strip()
+    allowed_pms  = pm_filter if pm_filter is not None else AUDIT_PROJECT_MANAGERS
+    pm           = str(row[F_PM]       or '').strip()
+    dept         = str(row[F_DEPT]     or '').strip()
+    proj_name    = str(row[F_PROJ_NAME] or '').strip()
+    emp_name     = str(row[F_EMP_NAME]  or '').strip()
 
+    # Always exclude specific employees
+    for excl in EXCLUDE_EMPLOYEES:
+        if excl.lower() in emp_name.lower():
+            return False
+
+    # PM in main audit list
     if pm in allowed_pms:
         return True
-    if dept.startswith(AUDIT_DEPT_PREFIX):
+
+    # Dhiraj only for EA-OR Managed Services OFA
+    if pm == DHIRAJ_PM_NAME and dept == DHIRAJ_DEPT:
         return True
+
+    # Special project always included
+    if proj_name in SPECIAL_PROJECTS:
+        return True
+
     return False
 
 

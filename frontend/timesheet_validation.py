@@ -131,8 +131,7 @@ st.markdown("""
 ALL_PMS = [
     'Barker, Sherrie',
     'Cox, Alison',
-    'Feldman, Michail',
-    'Gadia, Dhiraj',
+    'Gadia, Dhiraj (OFA Managed Services only)',
     'Meine, Laura',
     'Monahan, Maureen',
     'Tounkara, Youssouf',
