@@ -603,7 +603,28 @@ else:
         )
 
 
-# ── AI Assistant — always visible when DB is connected ────────────────────────
-st.markdown("---")
-st.markdown('<div class="step-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:.85rem;color:#0D7377;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;">AI Assistant</div>', unsafe_allow_html=True)
-_render_ai_tab(get_db(), st.session_state.run_id)
+# ── AI Assistant — always visible ────────────────────────────────────────────
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("""
+<div style="
+    background: linear-gradient(135deg, #0D1F2D 0%, #0A1628 100%);
+    border: 1px solid #0D7377;
+    border-left: 4px solid #0D7377;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem 0.5rem 1.5rem;
+    margin-top: 0.5rem;
+">
+  <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.75rem;">
+    <span style="font-size:1.2rem;">🤖</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:.9rem; font-weight:600;
+          color:#0D7377; text-transform:uppercase; letter-spacing:.1em;">AI Assistant</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:.68rem; color:#404060;
+          margin-left:auto;">Ask anything about the validation results</span>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+with st.container():
+    st.markdown('<div style="background:#0A1628;border:1px solid #0D7377;border-top:none;border-radius:0 0 8px 8px;padding:1rem 1.5rem 1.25rem 1.5rem;">', unsafe_allow_html=True)
+    _render_ai_tab(get_db(), st.session_state.run_id)
+    st.markdown('</div>', unsafe_allow_html=True)
