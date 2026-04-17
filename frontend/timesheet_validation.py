@@ -508,7 +508,7 @@ if not st.session_state.validation_done:
         <li>Upload the <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> (contains Tickets, People, Project Edits sheets)</li>
         <li>Click <strong style="color:var(--oracle-teal)">Run Validation</strong></li>
         <li>Review the error breakdown and preview table</li>
-        <li>Download the <strong style="color:var(--text-primary)">Correction Excel</strong> — same format as Alison's weekly sheets</li>
+        <li>Download the <strong style="color:var(--text-primary)">Correction Excel</strong></li>
       </ol>
       <div style="margin-top:1rem; font-size:.8rem; color:#404060; font-family:'IBM Plex Mono',monospace;">
         Validation rules: blank memo · missing ticket · format issues (spaces, em-dash, multiple tickets) · not in Jira · wrong project
