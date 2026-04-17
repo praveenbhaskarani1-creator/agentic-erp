@@ -127,6 +127,17 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ── PM list (defined at module level so accessible in sidebar + main body) ────
+ALL_PMS = [
+    'Barker, Sherrie',
+    'Cox, Alison',
+    'Feldman, Michail',
+    'Gadia, Dhiraj',
+    'Meine, Laura',
+    'Monahan, Maureen',
+    'Tounkara, Youssouf',
+]
+
 # ── Session state ─────────────────────────────────────────────────────────────
 for key, default in [
     ("validation_done", False),
@@ -169,10 +180,11 @@ def _load_vc():
     return vc
 
 
-def run_validation(fusion_bytes: bytes, jira_bytes: bytes):
+def run_validation(fusion_bytes: bytes, jira_bytes: bytes, pm_filter: set = None):
     """
     Write uploads to temp files, call vc.run(), read back results.
     Returns (error_df, all_df, summary_dict, excel_bytes).
+    pm_filter: set of PM names to include, or None for all default PMs.
     """
     vc = _load_vc()
 
@@ -189,7 +201,7 @@ def run_validation(fusion_bytes: bytes, jira_bytes: bytes):
 
     try:
         # Run full validation (writes correction_output.xlsx to output_path)
-        vc.run(fusion_path, jira_path, output_path)
+        vc.run(fusion_path, jira_path, output_path, pm_filter=pm_filter or None)
 
         # Read back the output Excel to get dataframes
         all_df   = pd.read_excel(output_path, sheet_name="All Entries")
@@ -249,7 +261,17 @@ def save_run_to_db(db, fusion_name, jira_name, summary, error_df):
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### Timesheet Validation")
-    st.markdown('<div class="sidebar-section">Step 1 — Upload Files</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 1 — Select Project Managers</div>', unsafe_allow_html=True)
+
+    selected_pms = st.multiselect(
+        "Include rows for these PMs",
+        options=ALL_PMS,
+        default=ALL_PMS,
+        key="pm_select",
+        help="Only Fusion rows belonging to selected PMs (or EA-OR dept) will be validated",
+    )
+
+    st.markdown('<div class="sidebar-section">Step 2 — Upload Files</div>', unsafe_allow_html=True)
 
     fusion_file = st.file_uploader(
         "Fusion Timecard Dump (XLSX)",
@@ -265,13 +287,15 @@ with st.sidebar:
         help="MS Weekly Hrs workbook with Tickets, People, Project Edits sheets",
     )
 
-    st.markdown('<div class="sidebar-section">Step 2 — Run</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 3 — Run</div>', unsafe_allow_html=True)
 
     run_btn = st.button(
         "Run Validation",
-        disabled=(fusion_file is None or jira_file is None),
+        disabled=(fusion_file is None or jira_file is None or len(selected_pms) == 0),
         key="run_btn",
     )
+    if len(selected_pms) == 0:
+        st.warning("Select at least one PM")
 
     if fusion_file:
         st.markdown(f'<span class="badge badge-green">Fusion loaded</span> <small style="color:#606080">{fusion_file.name}</small>', unsafe_allow_html=True)
@@ -283,7 +307,7 @@ with st.sidebar:
     else:
         st.markdown('<span class="badge badge-gray">Jira — not uploaded</span>', unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-section">Step 3 — Download</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 4 — Download</div>', unsafe_allow_html=True)
 
     if st.session_state.excel_bytes:
         fname = f"correction_output_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
@@ -313,8 +337,9 @@ with st.sidebar:
 if run_btn and fusion_file and jira_file:
     with st.spinner("Running validation — this may take 30–60 seconds..."):
         try:
+            pm_set = set(selected_pms) if selected_pms != ALL_PMS else None
             error_df, all_df, summary, excel_bytes = run_validation(
-                fusion_file.read(), jira_file.read()
+                fusion_file.read(), jira_file.read(), pm_filter=pm_set
             )
             st.session_state.validation_done = True
             st.session_state.error_df   = error_df

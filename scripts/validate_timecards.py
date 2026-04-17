@@ -200,16 +200,17 @@ SHARED_PROJECT_PREFIXES = ('SHNBADM', 'OFAINT', 'GOLD')
 SKIP_PROJECT_PREFIXES = ('PPS',)
 
 
-def should_include_row(row) -> bool:
+def should_include_row(row, pm_filter: set = None) -> bool:
     """
-    Replicates Alison's manual filter process:
-    Include if Project Manager is in our team OR department starts with EA-OR.
-    Exclude Canada-only rows (non-EA BU) where PM is not in our list.
+    Replicates Alison's manual filter process.
+    pm_filter: if provided, only include rows where PM is in this set.
+               Defaults to AUDIT_PROJECT_MANAGERS.
     """
+    allowed_pms = pm_filter if pm_filter is not None else AUDIT_PROJECT_MANAGERS
     pm   = str(row[F_PM] or '').strip()
     dept = str(row[F_DEPT] or '').strip()
 
-    if pm in AUDIT_PROJECT_MANAGERS:
+    if pm in allowed_pms:
         return True
     if dept.startswith(AUDIT_DEPT_PREFIX):
         return True
@@ -234,7 +235,7 @@ def is_skipped_project(proj_num: str) -> bool:
 # Load Fusion timecard rows
 # ---------------------------------------------------------------------------
 
-def load_fusion(fusion_path: str):
+def load_fusion(fusion_path: str, pm_filter: set = None):
     wb = openpyxl.load_workbook(fusion_path, read_only=True, data_only=True)
     ws = wb['Sheet1']
     rows = []
@@ -242,7 +243,7 @@ def load_fusion(fusion_path: str):
     for i, row in enumerate(ws.iter_rows(values_only=True)):
         if i == 0:
             continue
-        if should_include_row(row):
+        if should_include_row(row, pm_filter):
             rows.append(row)
         else:
             skipped_filter += 1
@@ -372,9 +373,9 @@ def _short_project(oracle_project_name: str) -> str:
 # Main — process all rows and write output
 # ---------------------------------------------------------------------------
 
-def run(fusion_path: str, jira_path: str, output_path: str):
+def run(fusion_path: str, jira_path: str, output_path: str, pm_filter: set = None):
     print(f"\nLoading Fusion: {Path(fusion_path).name}")
-    fusion_rows = load_fusion(fusion_path)
+    fusion_rows = load_fusion(fusion_path, pm_filter)
 
     print(f"Loading Jira lookups: {Path(jira_path).name}")
     tickets, people, project_mapping = load_jira_lookups(jira_path)
