@@ -145,6 +145,7 @@ for key, default in [
     ("summary", {}),
     ("excel_bytes", None),
     ("run_id", None),
+    ("db_saved", None),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -233,28 +234,114 @@ def run_validation(fusion_bytes: bytes, jira_bytes: bytes, pm_filter: set = None
     return error_df, all_df, summary, excel_bytes
 
 
-def save_run_to_db(db, fusion_name, jira_name, summary, error_df):
-    """Persist run metadata to ts_validation_runs."""
+def save_run_to_db(db, fusion_name, jira_name, summary):
+    """Persist run metadata to ts_validation_runs. Returns run_id."""
     try:
-        fn  = fusion_name.replace("'", "''")
-        jn  = jira_name.replace("'", "''")
-        rows_in  = summary.get("total_rows", 0)
-        rows_exc = 0
-        errors   = summary.get("total_errors", 0)
-        clean    = summary.get("clean_rows", 0)
-
+        fn = fusion_name.replace("'", "''")
+        jn = jira_name.replace("'", "''")
         db.execute(f"""
             INSERT INTO ts_validation_runs
                 (fusion_file, jira_file, fusion_rows_in, fusion_rows_excluded,
                  total_errors, total_clean, status)
-            VALUES ('{fn}', '{jn}', {rows_in}, {rows_exc}, {errors}, {clean}, 'completed')
+            VALUES ('{fn}', '{jn}',
+                {summary.get('total_rows', 0)}, 0,
+                {summary.get('total_errors', 0)}, {summary.get('clean_rows', 0)},
+                'completed')
         """)
-        # Get the new run ID
         rows = db.query("SELECT MAX(id) AS run_id FROM ts_validation_runs")
         return rows[0]["run_id"] if rows else None
     except Exception as e:
-        st.warning(f"Could not save run to DB: {e}")
+        st.warning(f"Could not save run metadata: {e}")
         return None
+
+
+def _esc(val, max_len=500):
+    """Escape value for inline SQL."""
+    if val is None or (isinstance(val, float) and str(val) == 'nan'):
+        return "NULL"
+    s = str(val).strip()[:max_len].replace("'", "''")
+    return f"'{s}'"
+
+
+def save_results_to_db(db, run_id: int, all_df):
+    """
+    Insert every validated row into ts_validation_results.
+    Batches 50 rows per ORDS request.
+    Returns (inserted, errors).
+    """
+    if run_id is None:
+        return 0, 0
+
+    inserted = errors = 0
+    batch = []
+
+    for i, row in all_df.iterrows():
+        has_err = 1 if str(row.get("Corrections Needed", "")).strip() else 0
+        note    = _esc(row.get("Corrections Needed"), 500)
+        detail  = _esc(row.get("Error Detail"), 500)
+        emp_num = _esc(row.get("Employee #"), 50)
+        emp     = _esc(row.get("Employee"), 200)
+        email   = _esc(row.get("Email"), 200)
+        proj_n  = _esc(row.get("Project #"), 100)
+        proj_nm = _esc(row.get("Customer/Job"), 500)
+        task    = _esc(row.get("Task Name"), 500)
+        memo    = _esc(row.get("Memo"), 2000)
+        ticket  = _esc(row.get("Extracted Ticket"), 50)
+        suggest = _esc(row.get("Suggested Ticket"), 50)
+        jira_op = _esc(row.get("Jira Oracle Project"), 500)
+        pmatch  = _esc(row.get("Project Match"), 10)
+        itype   = _esc(row.get("Issue Type"), 100)
+        labels  = _esc(row.get("Labels"), 500)
+        period  = _esc(row.get("Period"), 50)
+        status  = _esc(row.get("Status"), 50)
+        hours   = row.get("Actual Time") or 0
+        try:
+            hours = float(hours)
+        except Exception:
+            hours = 0
+
+        # Parse date
+        raw_date = row.get("Date")
+        try:
+            from datetime import datetime
+            if hasattr(raw_date, 'strftime'):
+                date_sql = f"TO_DATE('{raw_date.strftime('%Y-%m-%d')}','YYYY-MM-DD')"
+            elif raw_date and str(raw_date).strip() not in ('', 'nan', 'None'):
+                date_sql = f"TO_DATE('{str(raw_date)[:10]}','YYYY-MM-DD')"
+            else:
+                date_sql = "NULL"
+        except Exception:
+            date_sql = "NULL"
+
+        sql = (
+            f"INSERT INTO ts_validation_results "
+            f"(run_id,row_num,timecard_status,project_number,project_name,task_name,"
+            f"entry_date,employee_number,employee_name,email,total_hours,memo,"
+            f"has_error,correction_note,error_detail,extracted_ticket,suggested_ticket,"
+            f"jira_oracle_project,project_match,issue_type,jira_labels,timecard_period) "
+            f"VALUES ({run_id},{i},{status},{proj_n},{proj_nm},{task},"
+            f"{date_sql},{emp_num},{emp},{email},{hours},{memo},"
+            f"'{has_err}',{note},{detail},{ticket},{suggest},"
+            f"{jira_op},{pmatch},{itype},{labels},{period})"
+        )
+        batch.append(sql)
+
+        if len(batch) == 50:
+            try:
+                db.execute_many(batch)
+                inserted += len(batch)
+            except Exception as e:
+                errors += len(batch)
+            batch = []
+
+    if batch:
+        try:
+            db.execute_many(batch)
+            inserted += len(batch)
+        except Exception as e:
+            errors += len(batch)
+
+    return inserted, errors
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -349,8 +436,12 @@ if run_btn and fusion_file and jira_file:
             # Save to DB if connected
             db = get_db()
             if db:
-                run_id = save_run_to_db(db, fusion_file.name, jira_file.name, summary, error_df)
-                st.session_state.run_id = run_id
+                with st.spinner("Saving results to Oracle ADW..."):
+                    run_id = save_run_to_db(db, fusion_file.name, jira_file.name, summary)
+                    st.session_state.run_id = run_id
+                    if run_id:
+                        ins, errs = save_results_to_db(db, run_id, all_df)
+                        st.session_state.db_saved = {"inserted": ins, "errors": errs}
 
             st.success("Validation complete!")
         except Exception as e:
@@ -489,9 +580,16 @@ else:
 
     # ── Run ID ────────────────────────────────────────────────
     if st.session_state.run_id:
+        db_msg = ""
+        if st.session_state.db_saved:
+            ins  = st.session_state.db_saved["inserted"]
+            errs = st.session_state.db_saved["errors"]
+            db_msg = f"&nbsp;|&nbsp; {ins:,} rows saved to ADW"
+            if errs:
+                db_msg += f" ({errs} errors)"
         st.markdown(
             f'<div style="font-family:IBM Plex Mono,monospace;font-size:.68rem;color:#404060;margin-top:.5rem;">'
-            f'Run saved to Oracle ADW &nbsp;|&nbsp; run_id = {st.session_state.run_id}'
+            f'run_id = {st.session_state.run_id}{db_msg}'
             f'</div>',
             unsafe_allow_html=True,
         )
