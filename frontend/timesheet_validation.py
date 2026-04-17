@@ -377,8 +377,21 @@ def _render_ai_tab(db, current_run_id):
             try:
                 rows = db.query(sql)
                 if rows:
-                    st.dataframe(pd.DataFrame(rows), use_container_width=True, height=400)
-                    st.markdown(f'<span style="font-size:.75rem;color:#606080;">{len(rows)} rows returned</span>', unsafe_allow_html=True)
+                    result_df = pd.DataFrame(rows)
+                    st.dataframe(result_df, use_container_width=True, height=400)
+
+                    # Excel download
+                    buf = io.BytesIO()
+                    result_df.to_excel(buf, index=False, engine="openpyxl")
+                    buf.seek(0)
+                    fname = f"ai_results_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
+                    st.download_button(
+                        label="Download as Excel",
+                        data=buf,
+                        file_name=fname,
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        key="ai_download",
+                    )
                 else:
                     st.info("No results found.")
             except Exception as e:
