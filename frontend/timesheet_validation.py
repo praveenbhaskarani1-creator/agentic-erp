@@ -371,12 +371,7 @@ def _render_ai_tab(db, current_run_id):
     )
 
     if st.button("Ask", key="ai_ask_btn") and question.strip():
-        sql, desc = get_answer(question.strip(), run_id, groq_api_key=groq_key or None)
-
-        st.markdown(f'<div style="font-size:.75rem;color:#0D7377;font-family:IBM Plex Mono,monospace;margin:.5rem 0;">{desc}</div>', unsafe_allow_html=True)
-
-        with st.expander("Generated SQL", expanded=False):
-            st.code(sql, language="sql")
+        sql, _ = get_answer(question.strip(), run_id, groq_api_key=groq_key or None)
 
         if db:
             try:
@@ -385,9 +380,9 @@ def _render_ai_tab(db, current_run_id):
                     st.dataframe(pd.DataFrame(rows), use_container_width=True, height=400)
                     st.markdown(f'<span style="font-size:.75rem;color:#606080;">{len(rows)} rows returned</span>', unsafe_allow_html=True)
                 else:
-                    st.info("No rows returned.")
+                    st.info("No results found.")
             except Exception as e:
-                st.error(f"Query error: {e}")
+                st.error(f"Could not fetch results: {e}")
         else:
             st.info("Connect Oracle ADW to execute queries.")
 
