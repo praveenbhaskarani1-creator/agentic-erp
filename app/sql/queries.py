@@ -9,11 +9,13 @@ All queries run against:
     Schema : public
 
 Columns in fusion_time_entries:
-    id        - row identifier
-    employee  - employee name / ID
-    date      - timesheet date
-    hours     - hours worked
-    memo      - timesheet memo / description
+    id             - row identifier
+    employee       - employee name / ID
+    date           - timesheet date
+    hours          - hours worked
+    memo           - timesheet memo / description
+    project_number - project number (e.g. P-1001), nullable
+    project_name   - project name (e.g. Oracle Fusion ERP), nullable
 
 Rules:
   - ONLY pre-approved queries in this file may run against the DB
@@ -80,7 +82,7 @@ QUERIES: dict[str, QueryDef] = {
             "give me all timesheet entries",
             "display all records",
         ],
-        returns_columns=["id", "employee", "date", "hours", "memo"],
+        returns_columns=["id", "employee", "date", "hours", "memo", "project_number", "project_name"],
     ),
 
     # ── Query 2: Total Count ──────────────────────────────────
@@ -116,7 +118,9 @@ QUERIES: dict[str, QueryDef] = {
                 employee,
                 date,
                 hours,
-                memo
+                memo,
+                project_number,
+                project_name
             FROM public.fusion_time_entries
             WHERE memo IS NULL
             ORDER BY date DESC
@@ -132,7 +136,7 @@ QUERIES: dict[str, QueryDef] = {
             "which employees have no memo",
             "validate missing memos",
         ],
-        returns_columns=["id", "employee", "date", "hours", "memo"],
+        returns_columns=["id", "employee", "date", "hours", "memo", "project_number", "project_name"],
     ),
 
     # ── Query 4: Last 7 Days ──────────────────────────────────
@@ -145,7 +149,9 @@ QUERIES: dict[str, QueryDef] = {
                 employee,
                 date,
                 hours,
-                memo
+                memo,
+                project_number,
+                project_name
             FROM public.fusion_time_entries
             WHERE date >= CURRENT_DATE - INTERVAL '7 days'
             ORDER BY date DESC
@@ -160,7 +166,7 @@ QUERIES: dict[str, QueryDef] = {
             "show last 7 days of data",
             "recent submissions",
         ],
-        returns_columns=["id", "employee", "date", "hours", "memo"],
+        returns_columns=["id", "employee", "date", "hours", "memo", "project_number", "project_name"],
     ),
 
     # ── Query 5: Memo Not Like ERP% ───────────────────────────
@@ -177,7 +183,9 @@ QUERIES: dict[str, QueryDef] = {
                 employee,
                 date,
                 hours,
-                memo
+                memo,
+                project_number,
+                project_name
             FROM public.fusion_time_entries
             WHERE memo NOT LIKE 'ERP%'
             ORDER BY date DESC
@@ -194,7 +202,7 @@ QUERIES: dict[str, QueryDef] = {
             "invalid memo format",
             "entries not following naming convention",
         ],
-        returns_columns=["id", "employee", "date", "hours", "memo"],
+        returns_columns=["id", "employee", "date", "hours", "memo", "project_number", "project_name"],
     ),
 
 }

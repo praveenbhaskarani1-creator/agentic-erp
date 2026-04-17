@@ -13,11 +13,13 @@ What it does:
      so the frontend can poll for completion
 
 Expected CSV/Excel columns (order doesn't matter):
-  id        integer   — unique row ID (auto-assigned if missing)
-  employee  text      — employee name or ID
-  date      date      — YYYY-MM-DD
-  hours     decimal   — 0 < hours <= 24
-  memo      text      — optional, can be blank
+  id             integer   — unique row ID (auto-assigned if missing)
+  employee       text      — employee name or ID
+  date           date      — YYYY-MM-DD
+  hours          decimal   — 0 < hours <= 24
+  memo           text      — optional, can be blank
+  project_number text      — optional, project number (e.g. P-1001)
+  project_name   text      — optional, project name (e.g. Oracle Fusion ERP)
 
 Environment variables (set in Lambda config):
   DB_HOST      — RDS endpoint
@@ -48,17 +50,21 @@ s3 = boto3.client("s3")
 BUCKET         = os.environ.get("S3_ARTIFACTS_BUCKET", "agentic-erp-artifacts-241030170015")
 RESULTS_PREFIX = "uploads/results/"
 
-REQUIRED_COLUMNS = {"employee", "date", "hours"}
-ALL_COLUMNS      = {"id", "employee", "date", "hours", "memo"}
+REQUIRED_COLUMNS = {"employee", "date", "hours", "project_number", "project_name"}
+ALL_COLUMNS      = {"id", "employee", "date", "hours", "memo", "project_number", "project_name"}
 
 UPSERT_SQL = """
-    INSERT INTO public.fusion_time_entries (id, employee, date, hours, memo)
-    VALUES (%(id)s, %(employee)s, %(date)s, %(hours)s, %(memo)s)
+    INSERT INTO public.fusion_time_entries
+        (id, employee, date, hours, memo, project_number, project_name)
+    VALUES
+        (%(id)s, %(employee)s, %(date)s, %(hours)s, %(memo)s, %(project_number)s, %(project_name)s)
     ON CONFLICT (id) DO UPDATE SET
-        employee = EXCLUDED.employee,
-        date     = EXCLUDED.date,
-        hours    = EXCLUDED.hours,
-        memo     = EXCLUDED.memo
+        employee       = EXCLUDED.employee,
+        date           = EXCLUDED.date,
+        hours          = EXCLUDED.hours,
+        memo           = EXCLUDED.memo,
+        project_number = EXCLUDED.project_number,
+        project_name   = EXCLUDED.project_name
 """
 
 NEXT_ID_SQL = "SELECT COALESCE(MAX(id), 0) + 1 FROM public.fusion_time_entries"
@@ -216,15 +222,31 @@ def _validate_rows(rows: list[dict]) -> tuple[list[dict], list[str]]:
         # memo (optional)
         memo = (row.get("memo") or "").strip() or None
 
+        # project_number (required)
+        project_number = (row.get("project_number") or "").strip()
+        if not project_number:
+            row_errors.append(f"Row {i}: project_number is required")
+        else:
+            project_number = project_number or None
+
+        # project_name (required)
+        project_name = (row.get("project_name") or "").strip()
+        if not project_name:
+            row_errors.append(f"Row {i}: project_name is required")
+        else:
+            project_name = project_name or None
+
         if row_errors:
             errors.extend(row_errors)
         else:
             valid.append({
-                "id"      : parsed_id,    # None = auto-assign in DB step
-                "employee": employee,
-                "date"    : parsed_date,
-                "hours"   : parsed_hours,
-                "memo"    : memo,
+                "id"            : parsed_id,    # None = auto-assign in DB step
+                "employee"      : employee,
+                "date"          : parsed_date,
+                "hours"         : parsed_hours,
+                "memo"          : memo,
+                "project_number": project_number,
+                "project_name"  : project_name,
             })
 
     return valid, errors

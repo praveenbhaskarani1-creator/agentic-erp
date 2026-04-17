@@ -35,7 +35,7 @@ RESULTS_PREFIX  = "uploads/results/"
 URL_EXPIRES_SEC = 900
 
 # -- Config ----------------------------------------------------
-API_URL = "http://3.239.64.11:8000"   # -- your ECS task IP
+API_URL = "http://3.237.177.72:8000"   # -- your ECS task IP
 
 # -- Page config -----------------------------------------------
 st.set_page_config(
@@ -465,7 +465,7 @@ with st.sidebar:
 
     st.markdown("""
     <div style="font-family:'IBM Plex Mono',monospace; font-size:0.65rem; color:#404060; margin-top:0.3rem;">
-        Required columns: employee, date, hours<br>
+        Required columns: employee, date, hours, project_number, project_name<br>
         Optional: id, memo &nbsp;·&nbsp; Date format: YYYY-MM-DD
     </div>
     """, unsafe_allow_html=True)

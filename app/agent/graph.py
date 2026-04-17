@@ -33,6 +33,7 @@ from app.agent.nodes import (
     intent_node,
     sql_node,
     dynamic_sql_node,
+    general_knowledge_node,
     validate_node,
     respond_node,
     clarify_node,
@@ -68,13 +69,24 @@ def route_after_intent(state: AgentState) -> str:
 
 def route_after_dynamic_sql(state: AgentState) -> str:
     """
-    After dynamic_sql_node — clarify if SQL failed, otherwise respond.
+    After dynamic_sql_node — try general knowledge if SQL failed, otherwise validate.
     """
     if state.get("should_clarify") or state.get("sql_error"):
-        logger.info("[graph] Routing → clarify_node (dynamic SQL failed)")
-        return "clarify"
+        logger.info("[graph] Routing → general_knowledge_node (dynamic SQL failed)")
+        return "general_knowledge"
     logger.info("[graph] Routing → validate_node (dynamic SQL succeeded)")
     return "validate"
+
+
+def route_after_general_knowledge(state: AgentState) -> str:
+    """
+    After general_knowledge_node — clarify if Claude couldn't answer, otherwise END.
+    """
+    if state.get("should_clarify"):
+        logger.info("[graph] Routing → clarify_node (general knowledge exhausted)")
+        return "clarify"
+    logger.info("[graph] Routing → END (general knowledge answered)")
+    return "end"
 
 
 # ─────────────────────────────────────────────────────────────
@@ -89,12 +101,13 @@ def build_graph() -> StateGraph:
     graph = StateGraph(AgentState)
 
     # ── Add nodes ─────────────────────────────────────────────
-    graph.add_node("intent",      intent_node)
-    graph.add_node("sql",         sql_node)
-    graph.add_node("dynamic_sql", dynamic_sql_node)
-    graph.add_node("validate",    validate_node)
-    graph.add_node("respond",     respond_node)
-    graph.add_node("clarify",     clarify_node)
+    graph.add_node("intent",           intent_node)
+    graph.add_node("sql",              sql_node)
+    graph.add_node("dynamic_sql",      dynamic_sql_node)
+    graph.add_node("general_knowledge", general_knowledge_node)
+    graph.add_node("validate",         validate_node)
+    graph.add_node("respond",          respond_node)
+    graph.add_node("clarify",          clarify_node)
 
     # ── Entry point ───────────────────────────────────────────
     graph.set_entry_point("intent")
@@ -115,8 +128,18 @@ def build_graph() -> StateGraph:
         "dynamic_sql",
         route_after_dynamic_sql,
         {
-            "validate": "validate",
-            "clarify":  "clarify",
+            "validate":         "validate",
+            "general_knowledge": "general_knowledge",
+        }
+    )
+
+    # ── Routing after general knowledge ───────────────────────
+    graph.add_conditional_edges(
+        "general_knowledge",
+        route_after_general_knowledge,
+        {
+            "end":     END,
+            "clarify": "clarify",
         }
     )
 
@@ -168,8 +191,9 @@ def run_agent(question: str, user_id: str = "anonymous") -> dict:
         "validation_notes":  None,
         "final_answer":      None,
         "error_message":     None,
-        "should_clarify":    False,
-        "is_dynamic_sql":    False,
+        "should_clarify":       False,
+        "is_dynamic_sql":       False,
+        "is_general_knowledge": False,
     }
 
     try:

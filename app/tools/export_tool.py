@@ -45,12 +45,14 @@ TAB_CONFIG = [
 ]
 
 COLUMN_WIDTHS = {
-    "id":       8,
-    "employee": 25,
-    "date":     15,
-    "hours":    10,
-    "memo":     40,
-    "total_records": 18,
+    "id":             8,
+    "employee":       25,
+    "date":           15,
+    "hours":          10,
+    "memo":           40,
+    "project_number": 18,
+    "project_name":   30,
+    "total_records":  18,
 }
 
 

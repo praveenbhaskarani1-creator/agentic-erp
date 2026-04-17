@@ -29,6 +29,7 @@ Usage:
 """
 
 import logging
+import re
 from datetime import date, datetime
 from typing import Any
 
@@ -38,6 +39,32 @@ from app.db.connection import get_db
 from app.sql.queries import get_query, get_all_names, QueryDef
 
 logger = logging.getLogger(__name__)
+
+# ─────────────────────────────────────────────────────────────
+# SQL Safety Guardrail (Layer 2 — defence-in-depth inside tool)
+# ─────────────────────────────────────────────────────────────
+
+_FORBIDDEN = re.compile(
+    r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|CREATE|REPLACE|"
+    r"MERGE|UPSERT|GRANT|REVOKE|EXECUTE|EXEC|CALL)\b",
+    re.IGNORECASE,
+)
+
+def _assert_read_only(sql: str) -> None:
+    """
+    Raises ValueError if sql contains any write/DDL/admin keyword.
+    Called inside run_raw() as a second independent safety layer.
+    """
+    sql = sql.strip()
+    if not sql.upper().startswith("SELECT"):
+        raise ValueError("Safety violation: query must start with SELECT")
+    match = _FORBIDDEN.search(sql)
+    if match:
+        raise ValueError(f"Safety violation: forbidden keyword '{match.group(0).upper()}' detected")
+    if ";" in sql:
+        raise ValueError("Safety violation: semicolons not permitted")
+    if "--" in sql or "/*" in sql:
+        raise ValueError("Safety violation: SQL comments not permitted")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -167,6 +194,20 @@ class SQLTool:
             Same dict shape as run() for compatibility with validate/respond nodes.
         """
         logger.info(f"[sql_tool] run_raw: {sql[:100]}")
+
+        # Layer 2 safety check — independent of nodes.py guardrail
+        try:
+            _assert_read_only(sql)
+        except ValueError as safety_err:
+            logger.error(f"[sql_tool] run_raw BLOCKED by safety guardrail: {safety_err}")
+            return {
+                "status":      "error",
+                "query_name":  "dynamic",
+                "description": description,
+                "row_count":   0,
+                "rows":        [],
+                "message":     str(safety_err),
+            }
 
         try:
             with get_db() as db:

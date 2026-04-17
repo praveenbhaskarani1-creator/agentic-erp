@@ -49,5 +49,6 @@ class AgentState(TypedDict):
 
     # ── Routing ───────────────────────────────────────────────
     error_message:      Optional[str]   # set if anything goes wrong
-    should_clarify:     Optional[bool]  # True if question was unclear
-    is_dynamic_sql:     Optional[bool]  # True if LLM wrote its own SQL
+    should_clarify:        Optional[bool]  # True if question was unclear
+    is_dynamic_sql:        Optional[bool]  # True if LLM wrote its own SQL
+    is_general_knowledge:  Optional[bool]  # True if answered from Claude general knowledge

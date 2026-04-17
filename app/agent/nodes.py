@@ -14,21 +14,73 @@ Each node:
 """
 
 import logging
+import re
 from app.agent.state import AgentState
 from app.agent.prompts import (
     intent_system_prompt, intent_user_prompt,
     ANSWER_SYSTEM_PROMPT, answer_user_prompt,
+    GENERAL_KNOWLEDGE_SYSTEM_PROMPT,
     clarification_message,
 )
 from app.sql.queries import find_query_by_keyword, get_all_names
 from app.tools.sql_tool import SQLTool
-from app.tools.bedrock_tool import BedrockTool
+from app.tools.bedrock_tool import BedrockTool, MODEL_SONNET
 
 logger = logging.getLogger(__name__)
 
 # Shared tool instances — created once, reused across all requests
 _sql_tool     = SQLTool()
 _bedrock_tool = BedrockTool()
+
+# ─────────────────────────────────────────────────────────────
+# SQL Safety Guardrail (Layer 1 — called before execution)
+# ─────────────────────────────────────────────────────────────
+
+# All keywords that must never appear in a safe read-only query
+_FORBIDDEN_KEYWORDS = [
+    "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE",
+    "CREATE", "REPLACE", "MERGE", "UPSERT",
+    "GRANT", "REVOKE", "EXECUTE", "EXEC", "CALL",
+]
+
+# Regex: match forbidden keywords as whole words (not inside column/table names)
+_FORBIDDEN_PATTERN = re.compile(
+    r"\b(" + "|".join(_FORBIDDEN_KEYWORDS) + r")\b",
+    re.IGNORECASE,
+)
+
+def _validate_sql_safety(sql: str) -> tuple[bool, str]:
+    """
+    Validate that a SQL string is safe to execute.
+    Returns (True, "") if safe, (False, reason) if not.
+
+    Rules:
+      1. Must start with SELECT (after stripping whitespace/comments)
+      2. No forbidden keywords anywhere in the query
+      3. No semicolons mid-query (blocks stacked statements)
+      4. No SQL comment sequences that could hide injection
+    """
+    # Strip leading whitespace
+    sql_stripped = sql.strip()
+
+    # Rule 1 — must start with SELECT
+    if not sql_stripped.upper().startswith("SELECT"):
+        return False, "Query must start with SELECT"
+
+    # Rule 2 — no forbidden keywords (whole word match)
+    match = _FORBIDDEN_PATTERN.search(sql_stripped)
+    if match:
+        return False, f"Forbidden keyword detected: {match.group(0).upper()}"
+
+    # Rule 3 — no semicolons (prevents stacked statements)
+    if ";" in sql_stripped:
+        return False, "Semicolons are not allowed in queries"
+
+    # Rule 4 — no suspicious comment patterns used for injection
+    if "--" in sql_stripped or "/*" in sql_stripped:
+        return False, "SQL comments are not allowed in queries"
+
+    return True, ""
 
 
 # ─────────────────────────────────────────────────────────────
@@ -242,24 +294,14 @@ def dynamic_sql_node(state: AgentState) -> dict:
 
     sql = result["sql"].strip()
 
-    # Safety validation
-    sql_upper = sql.upper()
-    forbidden = ["INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "TRUNCATE"]
-
-    if not sql_upper.startswith("SELECT"):
-        logger.warning(f"[dynamic_sql_node] Unsafe SQL rejected (not SELECT): {sql[:80]}")
+    # ── Safety guardrail (Layer 1 of 3) ──────────────────────
+    safe, reason = _validate_sql_safety(sql)
+    if not safe:
+        logger.warning(f"[dynamic_sql_node] Unsafe SQL rejected: {reason} | sql={sql[:80]}")
         return {
             "should_clarify": True,
-            "sql_error": "Generated query was not a SELECT statement",
+            "sql_error": f"Query rejected by safety guardrail: {reason}",
         }
-
-    for kw in forbidden:
-        if kw in sql_upper:
-            logger.warning(f"[dynamic_sql_node] Unsafe SQL rejected (contains {kw})")
-            return {
-                "should_clarify": True,
-                "sql_error": f"Generated query contained forbidden keyword: {kw}",
-            }
 
     logger.info(f"[dynamic_sql_node] Executing dynamic SQL: {sql[:120]}")
 
@@ -277,7 +319,46 @@ def dynamic_sql_node(state: AgentState) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────
-# Node 6 — Clarification
+# Node 6 — General Knowledge (Option 4 — Claude general knowledge)
+# ─────────────────────────────────────────────────────────────
+
+def general_knowledge_node(state: AgentState) -> dict:
+    """
+    When dynamic SQL also fails, try answering from Claude's general knowledge.
+    Handles HR concepts, Oracle Fusion, ERP terminology, general business topics.
+    If Claude cannot answer → sets should_clarify = True for clarify_node.
+    """
+    question = state["user_question"]
+    logger.info(f"[general_knowledge_node] Attempting general answer for: {question[:80]}")
+
+    result = _bedrock_tool._call_claude(
+        system_prompt = GENERAL_KNOWLEDGE_SYSTEM_PROMPT,
+        user_message  = question,
+        model         = MODEL_SONNET,
+        max_tokens    = 1024,
+    )
+
+    if result.get("status") == "error":
+        logger.info("[general_knowledge_node] Bedrock error — routing to clarify")
+        return {"should_clarify": True}
+
+    answer = result.get("text", "").strip()
+
+    if not answer or answer == "CANNOT_ANSWER":
+        logger.info("[general_knowledge_node] Cannot answer — routing to clarify")
+        return {"should_clarify": True}
+
+    logger.info(f"[general_knowledge_node] General answer generated ({len(answer)} chars)")
+    return {
+        "final_answer":         answer,
+        "is_general_knowledge": True,
+        "intent_source":        "general_knowledge",
+        "should_clarify":       False,   # reset flag set by dynamic_sql_node failure
+    }
+
+
+# ─────────────────────────────────────────────────────────────
+# Node 7 — Clarification
 # ─────────────────────────────────────────────────────────────
 
 def clarify_node(state: AgentState) -> dict:

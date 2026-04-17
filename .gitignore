@@ -42,10 +42,11 @@ sample_upload_test*.csv
 .DS_Store
 Thumbs.db
 
-# Streamlit cache
-.streamlit/
+# Streamlit — ignore secrets only, keep config
+.streamlit/secrets.toml
 
 # Generated docs
 *.docx
 generate_doc.py
 architecture.html
+.streamlit/secrets.toml
