@@ -127,16 +127,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── PM list (defined at module level so accessible in sidebar + main body) ────
-ALL_PMS = [
-    'Barker, Sherrie',
-    'Cox, Alison',
-    'Gadia, Dhiraj (OFA Managed Services only)',
-    'Meine, Laura',
-    'Monahan, Maureen',
-    'Tounkara, Youssouf',
-]
-
 # ── Session state ─────────────────────────────────────────────────────────────
 for key, default in [
     ("validation_done", False),
@@ -344,20 +334,81 @@ def save_results_to_db(db, run_id: int, all_df):
     return inserted, errors
 
 
+def _render_ai_tab(db, current_run_id):
+    """Render the AI Assistant chat tab."""
+    from scripts.ts_agent import get_answer, QUERIES
+
+    groq_key = st.secrets.get("GROQ_API_KEY", "") or os.getenv("GROQ_API_KEY", "")
+    method_label = "Groq Llama 3.3 70B" if groq_key else "Keyword matching (free)"
+
+    st.markdown(
+        f'<div style="font-family:IBM Plex Mono,monospace;font-size:.7rem;color:#404060;margin-bottom:.5rem;">'
+        f'Mode: {method_label}</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Run selector
+    run_id_input = current_run_id
+    if db:
+        col_a, col_b = st.columns([3, 1])
+        with col_a:
+            run_id_input = st.number_input(
+                "Run ID to query",
+                min_value=1,
+                value=int(current_run_id) if current_run_id else 1,
+                step=1,
+                key="ai_run_id",
+            )
+        with col_b:
+            if st.button("Run History", key="ai_show_history"):
+                rows = db.query(
+                    "SELECT id, run_at, fusion_file, total_errors FROM ts_validation_runs "
+                    "ORDER BY run_at DESC FETCH FIRST 10 ROWS ONLY"
+                )
+                if rows:
+                    st.dataframe(pd.DataFrame(rows), use_container_width=True)
+    else:
+        st.warning("Oracle ADW not connected — results cannot be fetched.")
+
+    # Suggested questions
+    with st.expander("Suggested questions", expanded=False):
+        for q in QUERIES:
+            st.markdown(f'<span class="badge badge-gray">{q.name}</span> <span style="font-size:.8rem;color:#A0A0B0;">{q.description}</span>', unsafe_allow_html=True)
+
+    # Question input
+    question = st.text_input(
+        "Ask a question about the validation results",
+        placeholder="e.g. Who has the most errors?  |  Show entries with no memo  |  Format issues",
+        key="ai_question",
+    )
+
+    if st.button("Ask", key="ai_ask_btn") and question.strip():
+        run_id = int(run_id_input) if run_id_input else 1
+        sql, desc = get_answer(question.strip(), run_id, groq_api_key=groq_key or None)
+
+        st.markdown(f'<div style="font-size:.75rem;color:#0D7377;font-family:IBM Plex Mono,monospace;margin:.5rem 0;">{desc}</div>', unsafe_allow_html=True)
+
+        with st.expander("Generated SQL", expanded=False):
+            st.code(sql, language="sql")
+
+        if db:
+            try:
+                rows = db.query(sql)
+                if rows:
+                    st.dataframe(pd.DataFrame(rows), use_container_width=True, height=400)
+                    st.markdown(f'<span style="font-size:.75rem;color:#606080;">{len(rows)} rows returned</span>', unsafe_allow_html=True)
+                else:
+                    st.info("No rows returned.")
+            except Exception as e:
+                st.error(f"Query error: {e}")
+        else:
+            st.info("Connect Oracle ADW to execute queries.")
+
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### Timesheet Validation")
-    st.markdown('<div class="sidebar-section">Step 1 — Select Project Managers</div>', unsafe_allow_html=True)
-
-    selected_pms = st.multiselect(
-        "Include rows for these PMs",
-        options=ALL_PMS,
-        default=ALL_PMS,
-        key="pm_select",
-        help="Only Fusion rows belonging to selected PMs (or EA-OR dept) will be validated",
-    )
-
-    st.markdown('<div class="sidebar-section">Step 2 — Upload Files</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 1 — Upload Files</div>', unsafe_allow_html=True)
 
     fusion_file = st.file_uploader(
         "Fusion Timecard Dump (XLSX)",
@@ -373,15 +424,13 @@ with st.sidebar:
         help="MS Weekly Hrs workbook with Tickets, People, Project Edits sheets",
     )
 
-    st.markdown('<div class="sidebar-section">Step 3 — Run</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 2 — Run</div>', unsafe_allow_html=True)
 
     run_btn = st.button(
         "Run Validation",
-        disabled=(fusion_file is None or jira_file is None or len(selected_pms) == 0),
+        disabled=(fusion_file is None or jira_file is None),
         key="run_btn",
     )
-    if len(selected_pms) == 0:
-        st.warning("Select at least one PM")
 
     if fusion_file:
         st.markdown(f'<span class="badge badge-green">Fusion loaded</span> <small style="color:#606080">{fusion_file.name}</small>', unsafe_allow_html=True)
@@ -393,7 +442,7 @@ with st.sidebar:
     else:
         st.markdown('<span class="badge badge-gray">Jira — not uploaded</span>', unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-section">Step 4 — Download</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section">Step 3 — Download</div>', unsafe_allow_html=True)
 
     if st.session_state.excel_bytes:
         fname = f"correction_output_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
@@ -423,9 +472,8 @@ with st.sidebar:
 if run_btn and fusion_file and jira_file:
     with st.spinner("Running validation — this may take 30–60 seconds..."):
         try:
-            pm_set = set(selected_pms) if selected_pms != ALL_PMS else None
             error_df, all_df, summary, excel_bytes = run_validation(
-                fusion_file.read(), jira_file.read(), pm_filter=pm_set
+                fusion_file.read(), jira_file.read(), pm_filter=None
             )
             st.session_state.validation_done = True
             st.session_state.error_df   = error_df
@@ -538,7 +586,7 @@ else:
     st.markdown("---")
 
     # ── Error table ───────────────────────────────────────────
-    tab1, tab2 = st.tabs(["Errors Only", "All Entries"])
+    tab1, tab2, tab3 = st.tabs(["Errors Only", "All Entries", "AI Assistant"])
 
     with tab1:
         st.markdown(f"**{len(error_df):,} rows with issues** — same as Corrections Needed sheet")
@@ -577,6 +625,9 @@ else:
             use_container_width=True,
             height=400,
         )
+
+    with tab3:
+        _render_ai_tab(db, st.session_state.run_id)
 
     # ── Run ID ────────────────────────────────────────────────
     if st.session_state.run_id:
