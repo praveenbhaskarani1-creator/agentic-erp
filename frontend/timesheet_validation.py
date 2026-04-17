@@ -88,9 +88,14 @@ st.markdown("""
 .metric-label { font-size:.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.1em; }
 
 [data-testid="stSidebar"] { background: var(--oracle-navy) !important; border-right:1px solid var(--border); }
+[data-testid="stSidebar"] h3 { margin-top:.25rem !important; margin-bottom:.25rem !important; }
 .sidebar-section { font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--text-secondary);
-    text-transform:uppercase; letter-spacing:.15em; margin:1.5rem 0 .5rem 0;
-    padding-bottom:.3rem; border-bottom:1px solid var(--border); }
+    text-transform:uppercase; letter-spacing:.15em; margin:.6rem 0 .25rem 0;
+    padding-bottom:.2rem; border-bottom:1px solid var(--border); }
+[data-testid="stSidebar"] [data-testid="stFileUploader"] { margin-bottom:0 !important; }
+[data-testid="stSidebar"] [data-testid="stFileUploader"] > div { padding:.4rem !important; }
+[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] { padding:.5rem !important; min-height:auto !important; }
+[data-testid="stSidebar"] section[data-testid="stSidebar"] > div { padding-top:.5rem !important; }
 
 .stButton > button {
     background: var(--card-bg) !important; color: var(--text-primary) !important;
