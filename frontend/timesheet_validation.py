@@ -344,35 +344,18 @@ def _render_ai_tab(db, current_run_id):
     from scripts.ts_agent import get_answer, QUERIES
 
     groq_key = st.secrets.get("GROQ_API_KEY", "") or os.getenv("GROQ_API_KEY", "")
-    method_label = "Groq Llama 3.3 70B" if groq_key else "Keyword matching (free)"
 
-    st.markdown(
-        f'<div style="font-family:IBM Plex Mono,monospace;font-size:.7rem;color:#404060;margin-bottom:.5rem;">'
-        f'Mode: {method_label}</div>',
-        unsafe_allow_html=True,
-    )
+    # Resolve run_id automatically — use current session or latest from DB
+    run_id = current_run_id
+    if not run_id and db:
+        try:
+            rows = db.query("SELECT MAX(id) AS rid FROM ts_validation_runs")
+            run_id = rows[0]["rid"] if rows else 1
+        except Exception:
+            run_id = 1
+    run_id = int(run_id) if run_id else 1
 
-    # Run selector
-    run_id_input = current_run_id
-    if db:
-        col_a, col_b = st.columns([3, 1])
-        with col_a:
-            run_id_input = st.number_input(
-                "Run ID to query",
-                min_value=1,
-                value=int(current_run_id) if current_run_id else 1,
-                step=1,
-                key="ai_run_id",
-            )
-        with col_b:
-            if st.button("Run History", key="ai_show_history"):
-                rows = db.query(
-                    "SELECT id, run_at, fusion_file, total_errors FROM ts_validation_runs "
-                    "ORDER BY run_at DESC FETCH FIRST 10 ROWS ONLY"
-                )
-                if rows:
-                    st.dataframe(pd.DataFrame(rows), use_container_width=True)
-    else:
+    if not db:
         st.warning("Oracle ADW not connected — results cannot be fetched.")
 
     # Suggested questions
@@ -388,7 +371,6 @@ def _render_ai_tab(db, current_run_id):
     )
 
     if st.button("Ask", key="ai_ask_btn") and question.strip():
-        run_id = int(run_id_input) if run_id_input else 1
         sql, desc = get_answer(question.strip(), run_id, groq_api_key=groq_key or None)
 
         st.markdown(f'<div style="font-size:.75rem;color:#0D7377;font-family:IBM Plex Mono,monospace;margin:.5rem 0;">{desc}</div>', unsafe_allow_html=True)
