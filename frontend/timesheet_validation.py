@@ -530,41 +530,6 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Error breakdown ───────────────────────────────────────
-    if "breakdown" in summary:
-        col1, col2 = st.columns([1, 2])
-
-        with col1:
-            st.markdown('<div class="step-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;color:#0D7377;text-transform:uppercase;letter-spacing:.08em;">Error Breakdown</div>', unsafe_allow_html=True)
-            bd = summary["breakdown"].copy()
-            # Colour map for badges
-            def badge_for(note):
-                n = str(note).lower()
-                if "memo" in n:           return "badge-red"
-                if "not found" in n:      return "badge-red"
-                if "remove spaces" in n:  return "badge-amber"
-                if "dash" in n:           return "badge-amber"
-                if "one ticket" in n:     return "badge-amber"
-                if "ticket is for" in n:  return "badge-yellow"
-                return "badge-gray"
-
-            for _, r in bd.iterrows():
-                note  = r.iloc[0]
-                count = r.iloc[1]
-                badge = badge_for(note)
-                st.markdown(
-                    f'<div style="margin:.3rem 0;">'
-                    f'<span class="badge {badge}">{count:,}</span> '
-                    f'<span style="font-size:.82rem;color:var(--text-secondary);">{note}</span>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
-
-        with col2:
-            st.markdown('<div class="step-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;color:#0D7377;text-transform:uppercase;letter-spacing:.08em;">Error Distribution</div>', unsafe_allow_html=True)
-            chart_data = summary["breakdown"].set_index(summary["breakdown"].columns[0])[summary["breakdown"].columns[1]]
-            st.bar_chart(chart_data, use_container_width=True, height=220)
-
     st.markdown("---")
 
     # ── Error table ───────────────────────────────────────────
