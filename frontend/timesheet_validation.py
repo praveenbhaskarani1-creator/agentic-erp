@@ -586,10 +586,10 @@ else:
     st.markdown("---")
 
     # ── Error table ───────────────────────────────────────────
-    tab1, tab2, tab3 = st.tabs(["Errors Only", "All Entries", "AI Assistant"])
+    tab1, tab2 = st.tabs(["Errors Only", "All Entries"])
 
     with tab1:
-        st.markdown(f"**{len(error_df):,} rows with issues** — same as Corrections Needed sheet")
+        st.markdown(f"**{len(error_df):,} rows with issues**")
 
         # Filter controls
         col_f1, col_f2 = st.columns([2, 2])
@@ -626,9 +626,6 @@ else:
             height=400,
         )
 
-    with tab3:
-        _render_ai_tab(db, st.session_state.run_id)
-
     # ── Run ID ────────────────────────────────────────────────
     if st.session_state.run_id:
         db_msg = ""
@@ -644,3 +641,9 @@ else:
             f'</div>',
             unsafe_allow_html=True,
         )
+
+
+# ── AI Assistant — always visible when DB is connected ────────────────────────
+st.markdown("---")
+st.markdown('<div class="step-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:.85rem;color:#0D7377;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;">AI Assistant</div>', unsafe_allow_html=True)
+_render_ai_tab(get_db(), st.session_state.run_id)
