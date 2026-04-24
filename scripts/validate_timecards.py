@@ -78,13 +78,9 @@ def extract_ticket(memo: str):
 
     memo = str(memo).strip()
     issues = []
-
-    # Check for em dash used instead of hyphen
-    if EM_DASH in memo or EM_DASH2 in memo:
-        issues.append('em_dash')
-        memo_clean = memo.replace(EM_DASH, '-').replace(EM_DASH2, '-')
-    else:
-        memo_clean = memo
+    # Convert em dashes to regular hyphens for ticket extraction
+    # (we'll check the original memo to see if separator uses em dash)
+    memo_clean = memo.replace(EM_DASH, '-').replace(EM_DASH2, '-')
 
     # Check for spaces inside ticket: "CLSMS - 7" or "CLSMS -7"
     space_match = SPACES_IN_TICKET.search(memo_clean)
@@ -106,14 +102,24 @@ def extract_ticket(memo: str):
     ticket = all_tickets[0]
 
     # Check separator after ticket: should be " - " not "(" or nothing
-    # Find position of ticket in memo_clean
+    # Find position of ticket in original memo to check for em dash in separator
+    pos = memo.find(ticket)
+    if pos >= 0:
+        after_original = memo[pos + len(ticket):]
+        # Check if separator uses em dash instead of regular hyphen
+        if after_original and after_original[0] in (EM_DASH, EM_DASH2):
+            issues.append('em_dash')
+
+    # Use memo_clean for remaining checks
     pos = memo_clean.find(ticket)
-    after = memo_clean[pos + len(ticket):].lstrip()
-    if after and not after.startswith('-') and not after.startswith('('):
+    after = memo_clean[pos + len(ticket):]
+
+    after_stripped = after.lstrip()
+    if after_stripped and not after_stripped.startswith('-') and not after_stripped.startswith('('):
         # Has description but no proper separator
-        if len(after) > 1:
+        if len(after_stripped) > 1:
             issues.append('no_dash_separator')
-    elif after.startswith('('):
+    elif after_stripped.startswith('('):
         issues.append('no_dash_separator')
 
     return ticket, memo, issues
