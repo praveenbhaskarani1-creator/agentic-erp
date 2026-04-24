@@ -429,7 +429,7 @@ with st.sidebar:
         "MS Weekly Hrs / Jira Workbook (XLSX)",
         type=["xlsx"],
         key="jira_upload",
-        help="MS Weekly Hrs workbook with Tickets, People, Project Edits sheets",
+        help="Tickets sheet required. Project mappings are auto-inferred from tickets. Project Edits sheet only needed for conflicts.",
     )
 
     st.markdown('<div class="sidebar-section">Step 2 — Run</div>', unsafe_allow_html=True)
@@ -513,7 +513,7 @@ if not st.session_state.validation_done:
       <div class="step-title">How to use</div>
       <ol style="color:var(--text-secondary); font-size:.88rem; line-height:1.9;">
         <li>Upload the <strong style="color:var(--text-primary)">Fusion Timecard Dump</strong> (XLSX export from Oracle Fusion)</li>
-        <li>Upload the <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> (contains Tickets, People, Project Edits sheets)</li>
+        <li>Upload the <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> (<strong>Tickets</strong> sheet required, <strong>People</strong> & <strong>Project Edits</strong> optional)</li>
         <li>Click <strong style="color:var(--oracle-teal)">Run Validation</strong></li>
         <li>Review the error breakdown and preview table</li>
         <li>Download the <strong style="color:var(--text-primary)">Correction Excel</strong></li>

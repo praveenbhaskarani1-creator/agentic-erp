@@ -5,7 +5,7 @@ Step 1 — Standalone timecard validation script.
 
 Reads:
   1. Fusion Timecard xlsx  (Sheet1 — 34 columns)
-  2. MS Weekly Hrs xlsx    (Tickets, People, Project Edits sheets — lookup data)
+  2. MS Weekly Hrs xlsx    (Tickets sheet required; People, Project Edits optional)
 
 Replicates all Excel VLOOKUP + formula logic in Python, then runs
 7 validation rules to auto-detect correction notes.
@@ -126,7 +126,7 @@ def extract_ticket(memo: str):
 def load_jira_lookups(jira_path: str):
     wb = openpyxl.load_workbook(jira_path, read_only=True, data_only=True)
 
-    # --- Tickets sheet ---
+    # --- Tickets sheet (required) ---
     ws_tickets = wb['Tickets']
     tickets = {}
     for i, row in enumerate(ws_tickets.iter_rows(values_only=True)):
@@ -143,30 +143,36 @@ def load_jira_lookups(jira_path: str):
             'parent':         str(row[6]).strip() if row[6] else '',
         }
 
-    # --- People sheet ---
-    ws_people = wb['People']
+    # --- People sheet (optional) ---
     people = {}
-    for i, row in enumerate(ws_people.iter_rows(values_only=True)):
-        if i == 0:
-            continue
-        emp_num = row[0]
-        if not emp_num:
-            continue
-        people[str(emp_num).strip()] = {
-            'name':  str(row[1]).strip() if row[1] else '',
-            'email': str(row[2]).strip() if row[2] else '',
-        }
+    try:
+        ws_people = wb['People']
+        for i, row in enumerate(ws_people.iter_rows(values_only=True)):
+            if i == 0:
+                continue
+            emp_num = row[0]
+            if not emp_num:
+                continue
+            people[str(emp_num).strip()] = {
+                'name':  str(row[1]).strip() if row[1] else '',
+                'email': str(row[2]).strip() if row[2] else '',
+            }
+    except KeyError:
+        print("People sheet not found — emails will be unavailable")
 
-    # --- Project Edits sheet (Oracle name → Jira name mapping) ---
-    ws_proj = wb['Project Edits']
+    # --- Project Edits sheet (optional, Oracle name → Jira name mapping) ---
     project_mapping = {}
-    for i, row in enumerate(ws_proj.iter_rows(values_only=True)):
-        if i == 0:
-            continue
-        oracle_name = row[0]
-        jira_name   = row[1]
-        if oracle_name and jira_name:
-            project_mapping[str(oracle_name).strip()] = str(jira_name).strip()
+    try:
+        ws_proj = wb['Project Edits']
+        for i, row in enumerate(ws_proj.iter_rows(values_only=True)):
+            if i == 0:
+                continue
+            oracle_name = row[0]
+            jira_name   = row[1]
+            if oracle_name and jira_name:
+                project_mapping[str(oracle_name).strip()] = str(jira_name).strip()
+    except KeyError:
+        print("Project Edits sheet not found — project mapping will be unavailable")
 
     wb.close()
     print(f"Loaded: {len(tickets)} Jira tickets | {len(people)} employees | {len(project_mapping)} project mappings")
@@ -335,9 +341,10 @@ def validate_row(fusion_row, tickets, people, project_mapping, ticket_keys_list)
     if 'em_dash' in fmt_issues:
         return 'Edit long dash to a short dash', '', ticket, None, None
 
-    # R7 — Multiple tickets
+    # R7 — Multiple tickets (skip for shared projects like SHNBADM)
     if 'multiple_tickets' in fmt_issues:
-        return 'Use only one ticket per entry', '', ticket, None, None
+        if not is_shared_project(proj_num):
+            return 'Use only one ticket per entry', '', ticket, None, None
 
     # R4b — No dash separator after ticket number
     if 'no_dash_separator' in fmt_issues:
@@ -393,6 +400,60 @@ def _short_project(oracle_project_name: str) -> str:
     return client[:40]
 
 
+def build_auto_project_mapping(fusion_rows: list, tickets: dict) -> dict:
+    """
+    Pre-scan fusion rows to auto-infer project name mappings.
+
+    When a valid Jira ticket is found in a row, we know:
+      Fusion Customer/Job → should match → Jira oracle_project
+
+    If they differ, record the mapping: {fusion_name: jira_name}
+    Explicit Project Edits entries will override these in run().
+
+    Returns dict of auto-inferred mappings.
+    """
+    auto_map = {}
+    conflicts = {}
+
+    for row in fusion_rows:
+        # Skip rows excluded from validation (same guard as main loop)
+        if not row[F_EMP_NUM] or not row[F_DATE]:
+            continue
+
+        proj_num = str(row[F_PROJ_NUM] or '').strip()
+        if is_skipped_project(proj_num) or is_shared_project(proj_num):
+            continue
+
+        # Extract ticket from memo
+        memo = str(row[F_MEMO] or '').strip()
+        ticket, _, _ = extract_ticket(memo)
+        if not ticket or ticket not in tickets:
+            continue
+
+        # Get both sides of the comparison
+        proj_name = str(row[F_PROJ_NAME] or '').strip()
+        jira_oracle = tickets[ticket]['oracle_project']
+
+        # Skip if either is empty or they already match
+        if not proj_name or not jira_oracle or proj_name == jira_oracle:
+            continue
+
+        # Record mapping
+        if proj_name not in auto_map:
+            auto_map[proj_name] = jira_oracle
+        elif auto_map[proj_name] != jira_oracle:
+            # Conflict: same Fusion name maps to multiple Jira projects
+            # Mark for removal and skip
+            conflicts[proj_name] = True
+            if proj_name in auto_map:
+                del auto_map[proj_name]
+
+    if conflicts:
+        print(f"  Auto-map: {len(conflicts)} ambiguous project(s) skipped")
+
+    return auto_map
+
+
 # ---------------------------------------------------------------------------
 # Main — process all rows and write output
 # ---------------------------------------------------------------------------
@@ -405,6 +466,12 @@ def run(fusion_path: str, jira_path: str, output_path: str, pm_filter: set = Non
     tickets, people, project_mapping = load_jira_lookups(jira_path)
 
     ticket_keys_list = list(tickets.keys())
+
+    # Auto-infer project mappings from ticket data (explicit Project Edits overrides)
+    auto_mapping = build_auto_project_mapping(fusion_rows, tickets)
+    merged_project_mapping = {**auto_mapping, **project_mapping}
+    if auto_mapping:
+        print(f"  Project mappings: {len(auto_mapping)} auto-inferred, {len(project_mapping)} explicit")
 
     print(f"\nRunning validation on {len(fusion_rows)} rows...")
 
@@ -419,7 +486,7 @@ def run(fusion_path: str, jira_path: str, output_path: str, pm_filter: set = Non
             continue
 
         correction, detail, extracted_ticket, suggested_ticket, jira_info = validate_row(
-            row, tickets, people, project_mapping, ticket_keys_list
+            row, tickets, people, merged_project_mapping, ticket_keys_list
         )
 
         # Get employee email from People sheet
@@ -460,7 +527,11 @@ def run(fusion_path: str, jira_path: str, output_path: str, pm_filter: set = Non
 
     df = pd.DataFrame(results)
     total = len(df)
-    errors_df = df[df['Corrections Needed'] != ''].copy()
+    # Filter for rows with non-empty correction notes (handles '', None, NaN, whitespace)
+    errors_df = df[
+        (df['Corrections Needed'].notna()) &
+        (df['Corrections Needed'].astype(str).str.strip() != '')
+    ].copy()
 
     print(f"  Total rows processed : {total}")
     print(f"  Rows skipped (blank) : {skipped}")
