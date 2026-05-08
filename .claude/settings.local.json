@@ -14,7 +14,30 @@
       "Bash(curl -s --connect-timeout 8 http://98.92.220.36:8501 -o /dev/null -w \"%{http_code}\")",
       "Bash(ssh -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no ec2-user@98.92.220.36 \"cat ~/streamlit.log\")",
       "Bash(curl -s --connect-timeout 8 http://98.92.220.36:8501/healthz)",
-      "Bash(scp -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no frontend/app.py ec2-user@98.92.220.36:~/frontend/app.py)"
+      "Bash(scp -i \"C:/Users/PraveenBhaskarani/Downloads/RSA.pem\" -o StrictHostKeyChecking=no frontend/app.py ec2-user@98.92.220.36:~/frontend/app.py)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/config/personals.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/config/questions.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/config/search.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/config/secrets.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/config/settings.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/)",
+      "Bash(touch /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/config/__init__.py)",
+      "Bash(touch /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/modules/__init__.py)",
+      "Bash(touch /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/modules/ai/__init__.py)",
+      "Bash(touch /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/modules/resumes/__init__.py)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/modules/wellfound_adapter.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/modules/)",
+      "Bash(cp /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/run_wellfound.py /c/Users/PraveenBhaskarani/Documents/search/job-automation-multi-platform/)",
+      "Bash(rm /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/modules/wellfound_adapter.py)",
+      "Bash(rm /c/Users/PraveenBhaskarani/Documents/search/Auto_job_applier_linkedIn/run_wellfound.py)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\PraveenBhaskarani\\\\Documents\\\\agentic-erp\" -File | Where-Object {$_.Extension -in @\\('.py', '.md'\\)})",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\PraveenBhaskarani\\\\Documents\\\\agenticerp_OCI\" -File | Where-Object {$_.Extension -in @\\('.py', '.md'\\)} | Select-Object -First 20)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\PraveenBhaskarani\\\\Documents\\\\agenticerp_OCI\" -Recurse | Where-Object {$_.Extension -in @\\('.py', '.py.md'\\)} | Select-Object -First 30)",
+      "PowerShell(head -20)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\PraveenBhaskarani\\Documents\\search\\job-automation-multi-platform"
     ]
   }
 }

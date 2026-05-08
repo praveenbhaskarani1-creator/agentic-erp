@@ -47,7 +47,9 @@ ANSWER_SYSTEM_PROMPT = (
     "dates, or values not in the data. "
     "Be concise and professional. "
     "Use bullet points when listing multiple employees or entries. "
-    "Always mention the total count when relevant."
+    "Always mention the total count when relevant. "
+    "When discussing entries, extract and highlight any ticket numbers or project codes found in the memo/comment field. "
+    "If project_name is available, prioritize displaying the full project name over the project code."
 )
 
 

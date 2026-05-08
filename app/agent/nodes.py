@@ -32,6 +32,49 @@ logger = logging.getLogger(__name__)
 _sql_tool     = SQLTool()
 _bedrock_tool = BedrockTool()
 
+
+# ─────────────────────────────────────────────────────────────
+# Utility: Project name mapping for mismatches
+# ─────────────────────────────────────────────────────────────
+
+def _extract_ticket_from_memo(memo: str) -> str:
+    """
+    Extract ticket number/code from memo field.
+    Looks for patterns like: TICKET-123, PROJECT-456, etc.
+    """
+    if not memo or memo == "":
+        return None
+
+    import re
+    ticket_pattern = r'([A-Z]+[-]?\d+)'
+    match = re.search(ticket_pattern, str(memo))
+    return match.group(1) if match else None
+
+
+def _enrich_row_with_project_info(row: dict) -> dict:
+    """
+    Enrich a data row to ensure project_name is always returned,
+    even when project doesn't match or is NULL.
+    Also extracts ticket number from memo if present.
+    """
+    enriched = dict(row)
+
+    ticket = _extract_ticket_from_memo(enriched.get("memo"))
+    if ticket:
+        enriched["extracted_ticket"] = ticket
+
+    project_name = enriched.get("project_name")
+    project_number = enriched.get("project_number")
+
+    if project_name:
+        enriched["project_display"] = project_name
+    elif project_number:
+        enriched["project_display"] = project_number
+    else:
+        enriched["project_display"] = "Unspecified"
+
+    return enriched
+
 # ─────────────────────────────────────────────────────────────
 # SQL Safety Guardrail (Layer 1 — called before execution)
 # ─────────────────────────────────────────────────────────────
@@ -236,6 +279,10 @@ def respond_node(state: AgentState) -> dict:
     """
     Generates a plain English answer using Claude Sonnet.
     Reads sql_result and user_question from state.
+
+    Enriches results with:
+    - Extracted ticket numbers from memo field
+    - Project name display (always shown, even on mismatch)
     """
     question   = state["user_question"]
     sql_result = state.get("sql_result")
@@ -251,9 +298,16 @@ def respond_node(state: AgentState) -> dict:
             )
         }
 
+    enriched_result = dict(sql_result)
+    if enriched_result.get("rows"):
+        enriched_result["rows"] = [
+            _enrich_row_with_project_info(row)
+            for row in enriched_result["rows"]
+        ]
+
     # Get answer from Sonnet
     answer = _bedrock_tool.ask(
-        data     = sql_result,
+        data     = enriched_result,
         question = question,
     )
 
