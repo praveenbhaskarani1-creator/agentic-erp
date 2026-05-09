@@ -142,11 +142,11 @@ def load_jira_lookups(jira_path: str):
         if not key:
             continue
         tickets[str(key).strip()] = {
-            'oracle_project': str(row[2]).strip() if row[2] else '',
-            'jira_project':   str(row[3]).strip() if row[3] else '',
-            'labels':         str(row[4]).strip() if row[4] else '',
-            'issue_type':     str(row[5]).strip() if row[5] else '',
-            'parent':         str(row[6]).strip() if row[6] else '',
+            'oracle_project': str(row[2]).strip() if len(row) > 2 and row[2] else '',
+            'jira_project':   str(row[3]).strip() if len(row) > 3 and row[3] else '',
+            'labels':         str(row[4]).strip() if len(row) > 4 and row[4] else '',
+            'issue_type':     str(row[5]).strip() if len(row) > 5 and row[5] else '',
+            'parent':         str(row[6]).strip() if len(row) > 6 and row[6] else '',
         }
 
     # --- People sheet (optional) ---
@@ -160,11 +160,13 @@ def load_jira_lookups(jira_path: str):
             if not emp_num:
                 continue
             people[str(emp_num).strip()] = {
-                'name':  str(row[1]).strip() if row[1] else '',
-                'email': str(row[2]).strip() if row[2] else '',
+                'name':  str(row[1]).strip() if len(row) > 1 and row[1] else '',
+                'email': str(row[2]).strip() if len(row) > 2 and row[2] else '',
             }
     except KeyError:
         print("People sheet not found — emails will be unavailable")
+    except IndexError:
+        print("People sheet has insufficient columns — some data may be missing")
 
     # --- Project Edits sheet (optional, Oracle name → Jira name mapping) ---
     project_mapping = {}
@@ -173,12 +175,14 @@ def load_jira_lookups(jira_path: str):
         for i, row in enumerate(ws_proj.iter_rows(values_only=True)):
             if i == 0:
                 continue
-            oracle_name = row[0]
-            jira_name   = row[1]
+            oracle_name = row[0] if len(row) > 0 else None
+            jira_name   = row[1] if len(row) > 1 else None
             if oracle_name and jira_name:
                 project_mapping[str(oracle_name).strip()] = str(jira_name).strip()
     except KeyError:
         print("Project Edits sheet not found — project mapping will be unavailable")
+    except IndexError:
+        print("Project Edits sheet has insufficient columns — project mapping may be incomplete")
 
     wb.close()
     print(f"Loaded: {len(tickets)} Jira tickets | {len(people)} employees | {len(project_mapping)} project mappings")
