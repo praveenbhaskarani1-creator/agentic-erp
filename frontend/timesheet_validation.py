@@ -148,8 +148,9 @@ for key, default in [
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
+@st.cache_resource
 def get_db():
-    """Return RdsDB if credentials available, else None."""
+    """Return RdsDB if credentials available, else None. (Cached)"""
     try:
         from scripts.rds_db import RdsDB
         # RdsDB reads from app.config (which loads from .env / secrets)
@@ -165,10 +166,14 @@ def get_db():
             database=st.secrets.get("DB_NAME", os.getenv("DB_NAME", "timecard_validation")),
             user=st.secrets.get("DB_USER", os.getenv("DB_USER", "postgres")),
             password=st.secrets.get("DB_PASSWORD", os.getenv("DB_PASSWORD", "")),
+            timeout=5,  # 5 second timeout
         )
+        # Test connection
+        health = db.health_check()
+        if health["status"] != "ok":
+            return None
         return db
     except Exception as e:
-        st.warning(f"Database connection unavailable: {e}")
         return None
 
 
@@ -365,7 +370,7 @@ def _render_ai_tab(db, current_run_id):
     run_id = int(run_id) if run_id else 1
 
     if not db:
-        st.warning("Oracle ADW not connected — results cannot be fetched.")
+        st.info("💾 Database not connected — AI queries will use cached results only.")
 
     st.markdown("""
     <div style="border:2px solid #0D7377; border-radius:10px; padding:1.25rem 1.5rem 1rem 1.5rem; background:#0A1628; margin-bottom:.75rem;">
@@ -419,7 +424,7 @@ def _render_ai_tab(db, current_run_id):
             except Exception as e:
                 st.error(f"Could not fetch results: {e}")
         else:
-            st.info("Connect Oracle ADW to execute queries.")
+            st.info("Connect to RDS PostgreSQL to execute queries.")
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -478,11 +483,11 @@ with st.sidebar:
     if db:
         h = db.health_check()
         if h["status"] == "ok":
-            st.markdown('<span class="badge badge-green">Oracle ADW Connected</span>', unsafe_allow_html=True)
+            st.markdown('<span class="badge badge-green">RDS PostgreSQL Connected</span>', unsafe_allow_html=True)
         else:
-            st.markdown('<span class="badge badge-amber">Oracle ADW Error</span>', unsafe_allow_html=True)
+            st.markdown('<span class="badge badge-amber">RDS PostgreSQL Error</span>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="badge badge-gray">Oracle ADW — no credentials</span>', unsafe_allow_html=True)
+        st.markdown('<span class="badge badge-gray">RDS PostgreSQL — no credentials</span>', unsafe_allow_html=True)
 
 
 # ── Run validation ─────────────────────────────────────────────────────────────
@@ -501,7 +506,7 @@ if run_btn and fusion_file and jira_file:
             # Save to DB if connected
             db = get_db()
             if db:
-                with st.spinner("Saving results to Oracle ADW..."):
+                with st.spinner("Saving results to RDS PostgreSQL..."):
                     run_id = save_run_to_db(db, fusion_file.name, jira_file.name, summary)
                     st.session_state.run_id = run_id
                     if run_id:
