@@ -9,7 +9,7 @@ Features:
   - Summary metrics and error breakdown
   - Preview error table
   - Download correction_output.xlsx
-  - Save run history to Oracle ADW via ORDS
+  - Save run history to AWS RDS PostgreSQL
 
 Run locally:
     streamlit run frontend/timesheet_validation.py
@@ -17,7 +17,7 @@ Run locally:
 Deploy to Streamlit Cloud:
     - Push repo to GitHub
     - Connect at share.streamlit.io
-    - Set secrets: OCI_DB_USER, OCI_DB_PASSWORD
+    - Set secrets: DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
 """
 
 import io
@@ -149,17 +149,26 @@ for key, default in [
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def get_db():
-    """Return OrdsDB if credentials available, else None."""
+    """Return RdsDB if credentials available, else None."""
     try:
-        from scripts.oci_db import OrdsDB
-        pwd = (
-            st.secrets.get("OCI_DB_PASSWORD", "")
-            or os.getenv("OCI_DB_PASSWORD", "")
+        from scripts.rds_db import RdsDB
+        # RdsDB reads from app.config (which loads from .env / secrets)
+        host = (
+            st.secrets.get("DB_HOST", "")
+            or os.getenv("DB_HOST", "")
         )
-        if not pwd:
+        if not host:
             return None
-        return OrdsDB(password=pwd)
-    except Exception:
+        db = RdsDB(
+            host=host,
+            port=int(st.secrets.get("DB_PORT", os.getenv("DB_PORT", "5432"))),
+            database=st.secrets.get("DB_NAME", os.getenv("DB_NAME", "timecard_validation")),
+            user=st.secrets.get("DB_USER", os.getenv("DB_USER", "postgres")),
+            password=st.secrets.get("DB_PASSWORD", os.getenv("DB_PASSWORD", "")),
+        )
+        return db
+    except Exception as e:
+        st.warning(f"Database connection unavailable: {e}")
         return None
 
 
@@ -237,13 +246,13 @@ def save_run_to_db(db, fusion_name, jira_name, summary):
         db.execute(f"""
             INSERT INTO ts_validation_runs
                 (fusion_file, jira_file, fusion_rows_in, fusion_rows_excluded,
-                 total_errors, total_clean, status)
+                 total_errors, total_clean, status, created_at)
             VALUES ('{fn}', '{jn}',
                 {summary.get('total_rows', 0)}, 0,
                 {summary.get('total_errors', 0)}, {summary.get('clean_rows', 0)},
-                'completed')
+                'completed', NOW())
         """)
-        rows = db.query("SELECT MAX(id) AS run_id FROM ts_validation_runs")
+        rows = db.query("SELECT MAX(id) as run_id FROM ts_validation_runs")
         return rows[0]["run_id"] if rows else None
     except Exception as e:
         st.warning(f"Could not save run metadata: {e}")
@@ -295,14 +304,14 @@ def save_results_to_db(db, run_id: int, all_df):
         except Exception:
             hours = 0
 
-        # Parse date
+        # Parse date (PostgreSQL format)
         raw_date = row.get("Date")
         try:
             from datetime import datetime
             if hasattr(raw_date, 'strftime'):
-                date_sql = f"TO_DATE('{raw_date.strftime('%Y-%m-%d')}','YYYY-MM-DD')"
+                date_sql = f"'{raw_date.strftime('%Y-%m-%d')}'::date"
             elif raw_date and str(raw_date).strip() not in ('', 'nan', 'None'):
-                date_sql = f"TO_DATE('{str(raw_date)[:10]}','YYYY-MM-DD')"
+                date_sql = f"'{str(raw_date)[:10]}'::date"
             else:
                 date_sql = "NULL"
         except Exception:
