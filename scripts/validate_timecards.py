@@ -189,6 +189,59 @@ def load_jira_lookups(jira_path: str):
     return tickets, people, project_mapping
 
 
+def load_jira_lookups_from_rds():
+    """
+    Load Jira tickets and people from AWS RDS PostgreSQL.
+    Returns (tickets, people, project_mapping) in same format as load_jira_lookups().
+    """
+    try:
+        from app.db.connection import DatabaseManager
+        from app.config import settings
+        from sqlalchemy import text
+
+        # Initialize DB connection
+        DatabaseManager.init(db_url=settings.db_url)
+
+        with DatabaseManager.get_engine().connect() as conn:
+            # Load Jira tickets
+            tickets = {}
+            result = conn.execute(text('SELECT key, oracle_project_name FROM jira_tickets'))
+            for row in result:
+                key = str(row[0]).strip()
+                oracle_proj = str(row[1]).strip() if row[1] else ''
+                tickets[key] = {
+                    'oracle_project': oracle_proj,
+                    'jira_project':   '',
+                    'labels':         '',
+                    'issue_type':     '',
+                    'parent':         '',
+                }
+
+            # Load people (employees)
+            people = {}
+            result = conn.execute(text('SELECT employee_number, employee_name, email_address FROM people'))
+            for row in result:
+                emp_num = str(row[0]).strip()
+                emp_name = str(row[1]).strip() if row[1] else ''
+                email = str(row[2]).strip() if row[2] else ''
+                people[emp_num] = {
+                    'name':  emp_name,
+                    'email': email,
+                }
+
+            # Project mapping (empty for now — can be enhanced later)
+            project_mapping = {}
+
+        DatabaseManager.close()
+        print(f"Loaded from RDS: {len(tickets)} Jira tickets | {len(people)} employees")
+        return tickets, people, project_mapping
+
+    except Exception as e:
+        print(f"Error loading from RDS: {e}")
+        print("Falling back to Excel file loading...")
+        return None, None, None
+
+
 # ---------------------------------------------------------------------------
 # Filter criteria — replicates Alison's manual Excel filter
 # From transcript: filter by PM name + Department (EA-OR), skip Canada/EPM/DBA
@@ -468,12 +521,35 @@ def build_auto_project_mapping(fusion_rows: list, tickets: dict) -> dict:
 # Main — process all rows and write output
 # ---------------------------------------------------------------------------
 
-def run(fusion_path: str, jira_path: str, output_path: str, pm_filter: set = None):
+def run(fusion_path: str, jira_path: str = None, output_path: str = None, pm_filter: set = None, use_rds: bool = False):
+    """
+    Run validation on timesheet data.
+
+    Args:
+        fusion_path: Path to Fusion timecard Excel file
+        jira_path: Path to Jira/People Excel file (optional if use_rds=True)
+        output_path: Path to write correction output Excel
+        pm_filter: Optional set of PM names to include
+        use_rds: If True, load Jira data from RDS PostgreSQL instead of Excel
+    """
     print(f"\nLoading Fusion: {Path(fusion_path).name}")
     fusion_rows = load_fusion(fusion_path, pm_filter)
 
-    print(f"Loading Jira lookups: {Path(jira_path).name}")
-    tickets, people, project_mapping = load_jira_lookups(jira_path)
+    # Load Jira lookups from RDS or Excel
+    if use_rds:
+        print("Loading Jira lookups from RDS PostgreSQL...")
+        tickets, people, project_mapping = load_jira_lookups_from_rds()
+        if tickets is None:
+            # Fallback to Excel if RDS fails
+            if not jira_path:
+                raise ValueError("RDS failed and no jira_path provided for fallback")
+            print(f"Falling back to Excel: {Path(jira_path).name}")
+            tickets, people, project_mapping = load_jira_lookups(jira_path)
+    else:
+        if not jira_path:
+            raise ValueError("jira_path required when use_rds=False")
+        print(f"Loading Jira lookups: {Path(jira_path).name}")
+        tickets, people, project_mapping = load_jira_lookups(jira_path)
 
     ticket_keys_list = list(tickets.keys())
 

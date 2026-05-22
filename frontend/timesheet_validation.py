@@ -189,11 +189,12 @@ def _load_vc():
     return vc
 
 
-def run_validation(fusion_bytes: bytes, jira_bytes: bytes, pm_filter: set = None):
+def run_validation(fusion_bytes: bytes, jira_bytes: bytes = None, pm_filter: set = None, use_rds: bool = True):
     """
     Write uploads to temp files, call vc.run(), read back results.
     Returns (error_df, all_df, summary_dict, excel_bytes).
     pm_filter: set of PM names to include, or None for all default PMs.
+    use_rds: If True, load Jira data from RDS (jira_bytes ignored).
     """
     vc = _load_vc()
 
@@ -201,16 +202,19 @@ def run_validation(fusion_bytes: bytes, jira_bytes: bytes, pm_filter: set = None
         f1.write(fusion_bytes)
         fusion_path = f1.name
 
-    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as f2:
-        f2.write(jira_bytes)
-        jira_path = f2.name
+    jira_path = None
+    if jira_bytes and not use_rds:
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as f2:
+            f2.write(jira_bytes)
+            jira_path = f2.name
 
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as f3:
         output_path = f3.name
 
     try:
         # Run full validation (writes correction_output.xlsx to output_path)
-        vc.run(fusion_path, jira_path, output_path, pm_filter=pm_filter or None)
+        # Use RDS for Jira data by default
+        vc.run(fusion_path, jira_path=jira_path, output_path=output_path, pm_filter=pm_filter or None, use_rds=use_rds)
 
         # Read back the output Excel to get dataframes
         all_df   = pd.read_excel(output_path, sheet_name="All Entries")
@@ -440,17 +444,17 @@ with st.sidebar:
     )
 
     jira_file = st.file_uploader(
-        "MS Weekly Hrs / Jira Workbook (XLSX)",
+        "MS Weekly Hrs / Jira Workbook (XLSX) — Optional",
         type=["xlsx"],
         key="jira_upload",
-        help="Tickets sheet required. Project mappings are auto-inferred from tickets. Project Edits sheet only needed for conflicts.",
+        help="Optional — Jira tickets will be loaded from database. Upload only if you want to override with custom mappings.",
     )
 
     st.markdown('<div class="sidebar-section">Step 2 — Run</div>', unsafe_allow_html=True)
 
     run_btn = st.button(
         "Run Validation",
-        disabled=(fusion_file is None or jira_file is None),
+        disabled=(fusion_file is None),
         key="run_btn",
     )
 
@@ -460,9 +464,9 @@ with st.sidebar:
         st.markdown('<span class="badge badge-gray">Fusion — not uploaded</span>', unsafe_allow_html=True)
 
     if jira_file:
-        st.markdown(f'<span class="badge badge-green">Jira loaded</span> <small style="color:#606080">{jira_file.name}</small>', unsafe_allow_html=True)
+        st.markdown(f'<span class="badge badge-green">Jira file loaded</span> <small style="color:#606080">{jira_file.name}</small>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="badge badge-gray">Jira — not uploaded</span>', unsafe_allow_html=True)
+        st.markdown('<span class="badge badge-green">Jira data — from RDS</span>', unsafe_allow_html=True)
 
     st.markdown('<div class="sidebar-section">Step 3 — Download</div>', unsafe_allow_html=True)
 
@@ -491,11 +495,16 @@ with st.sidebar:
 
 
 # ── Run validation ─────────────────────────────────────────────────────────────
-if run_btn and fusion_file and jira_file:
+if run_btn and fusion_file:
     with st.spinner("Running validation — this may take 30–60 seconds..."):
         try:
+            # Use RDS for Jira data; optionally override with uploaded file
+            jira_bytes = jira_file.read() if jira_file else None
             error_df, all_df, summary, excel_bytes = run_validation(
-                fusion_file.read(), jira_file.read(), pm_filter=None
+                fusion_file.read(),
+                jira_bytes=jira_bytes,
+                pm_filter=None,
+                use_rds=True
             )
             st.session_state.validation_done = True
             st.session_state.error_df   = error_df
@@ -507,7 +516,8 @@ if run_btn and fusion_file and jira_file:
             db = get_db()
             if db:
                 with st.spinner("Saving results to RDS PostgreSQL..."):
-                    run_id = save_run_to_db(db, fusion_file.name, jira_file.name, summary)
+                    jira_name = jira_file.name if jira_file else "(RDS - all tickets)"
+                    run_id = save_run_to_db(db, fusion_file.name, jira_name, summary)
                     st.session_state.run_id = run_id
                     if run_id:
                         ins, errs = save_results_to_db(db, run_id, all_df)
@@ -527,7 +537,7 @@ if not st.session_state.validation_done:
       <div class="step-title">How to use</div>
       <ol style="color:var(--text-secondary); font-size:.88rem; line-height:1.9;">
         <li>Upload the <strong style="color:var(--text-primary)">Fusion Timecard Dump</strong> (XLSX export from Oracle Fusion)</li>
-        <li>Upload the <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> (<strong>Tickets</strong> sheet required, <strong>People</strong> & <strong>Project Edits</strong> optional)</li>
+        <li>Optionally upload <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> for custom project mappings (Jira data loaded from database)</li>
         <li>Click <strong style="color:var(--oracle-teal)">Run Validation</strong></li>
         <li>Review the error breakdown and preview table</li>
         <li>Download the <strong style="color:var(--text-primary)">Correction Excel</strong></li>
