@@ -450,17 +450,17 @@ with st.sidebar:
     )
 
     jira_file = st.file_uploader(
-        "MS Weekly Hrs / Jira Workbook (XLSX) — Optional",
+        "MS Weekly Hrs / Jira Workbook (XLSX)",
         type=["xlsx"],
         key="jira_upload",
-        help="Optional — Jira tickets will be loaded from database. Upload only if you want to override with custom mappings.",
+        help="Required for Streamlit Cloud. Jira tickets from database will be used if available.",
     )
 
     st.markdown('<div class="sidebar-section">Step 2 — Run</div>', unsafe_allow_html=True)
 
     run_btn = st.button(
         "Run Validation",
-        disabled=(fusion_file is None),
+        disabled=(fusion_file is None or jira_file is None),
         key="run_btn",
     )
 
@@ -470,9 +470,9 @@ with st.sidebar:
         st.markdown('<span class="badge badge-gray">Fusion — not uploaded</span>', unsafe_allow_html=True)
 
     if jira_file:
-        st.markdown(f'<span class="badge badge-green">Jira file loaded</span> <small style="color:#606080">{jira_file.name}</small>', unsafe_allow_html=True)
+        st.markdown(f'<span class="badge badge-green">Jira loaded</span> <small style="color:#606080">{jira_file.name}</small>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="badge badge-green">Jira data — from RDS</span>', unsafe_allow_html=True)
+        st.markdown('<span class="badge badge-gray">Jira — not uploaded</span>', unsafe_allow_html=True)
 
     st.markdown('<div class="sidebar-section">Step 3 — Download</div>', unsafe_allow_html=True)
 
@@ -504,13 +504,19 @@ with st.sidebar:
 if run_btn and fusion_file:
     with st.spinner("Running validation — this may take 30–60 seconds..."):
         try:
-            # Use RDS for Jira data; optionally override with uploaded file
-            jira_bytes = jira_file.read() if jira_file else None
+            # Use Excel file if uploaded, otherwise try RDS
+            if jira_file:
+                jira_bytes = jira_file.read()
+                use_rds_flag = False
+            else:
+                jira_bytes = None
+                use_rds_flag = True
+
             error_df, all_df, summary, excel_bytes = run_validation(
                 fusion_file.read(),
                 jira_bytes=jira_bytes,
                 pm_filter=None,
-                use_rds=True
+                use_rds=use_rds_flag
             )
             st.session_state.validation_done = True
             st.session_state.error_df   = error_df
@@ -543,7 +549,7 @@ if not st.session_state.validation_done:
       <div class="step-title">How to use</div>
       <ol style="color:var(--text-secondary); font-size:.88rem; line-height:1.9;">
         <li>Upload the <strong style="color:var(--text-primary)">Fusion Timecard Dump</strong> (XLSX export from Oracle Fusion)</li>
-        <li>Optionally upload <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> for custom project mappings (Jira data loaded from database)</li>
+        <li>Upload the <strong style="color:var(--text-primary)">MS Weekly Hrs workbook</strong> (Tickets sheet required; People & Project Edits optional)</li>
         <li>Click <strong style="color:var(--oracle-teal)">Run Validation</strong></li>
         <li>Review the error breakdown and preview table</li>
         <li>Download the <strong style="color:var(--text-primary)">Correction Excel</strong></li>

@@ -542,12 +542,15 @@ def run(fusion_path: str, jira_path: str = None, output_path: str = None, pm_fil
         if tickets is None:
             # Fallback to Excel if RDS fails
             if not jira_path:
-                raise ValueError("RDS failed and no jira_path provided for fallback")
+                raise ValueError(
+                    "Could not connect to RDS PostgreSQL and no Jira Excel file provided.\n"
+                    "Please upload the 'MS Weekly Hrs / Jira Workbook' Excel file."
+                )
             print(f"Falling back to Excel: {Path(jira_path).name}")
             tickets, people, project_mapping = load_jira_lookups(jira_path)
     else:
         if not jira_path:
-            raise ValueError("jira_path required when use_rds=False")
+            raise ValueError("Jira Excel file required")
         print(f"Loading Jira lookups: {Path(jira_path).name}")
         tickets, people, project_mapping = load_jira_lookups(jira_path)
 
