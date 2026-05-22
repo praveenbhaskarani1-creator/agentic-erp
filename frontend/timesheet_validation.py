@@ -177,14 +177,20 @@ def get_db():
         return None
 
 
-@st.cache_resource
 def _load_vc():
-    """Load validate_timecards module once and cache it."""
+    """Load validate_timecards module (reload to ensure latest code)."""
     import importlib.util
+    import sys
+
+    # Remove cached module if it exists to force reload
+    if "validate_timecards" in sys.modules:
+        del sys.modules["validate_timecards"]
+
     spec = importlib.util.spec_from_file_location(
         "validate_timecards", ROOT / "scripts" / "validate_timecards.py"
     )
     vc = importlib.util.module_from_spec(spec)
+    sys.modules["validate_timecards"] = vc
     spec.loader.exec_module(vc)
     return vc
 
