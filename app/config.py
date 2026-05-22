@@ -78,13 +78,13 @@ class Settings(BaseSettings):
     log_level: str      = Field(default="INFO", alias="LOG_LEVEL")
 
     # ── Database ──────────────────────────────────────────────
-    # Local dev:   localhost:5433  (via SSH tunnel)
+    # Local dev:   localhost:5433  (via SSH tunnel) OR RDS direct
     # Production:  RDS endpoint    (private subnet, no tunnel)
-    db_host: str        = Field(default="localhost",  alias="DB_HOST")
-    db_port: int        = Field(default=5433,         alias="DB_PORT")
-    db_name: str        = Field(default="agentdb",    alias="DB_NAME")
-    db_user: str        = Field(default="pgadmin",    alias="DB_USER")
-    db_password: str    = Field(default="",           alias="DB_PASSWORD")
+    db_host: str        = Field(default="agentic-erp-db.cwb0sigyk8na.us-east-1.rds.amazonaws.com",  alias="DB_HOST")
+    db_port: int        = Field(default=5432,         alias="DB_PORT")
+    db_name: str        = Field(default="timecard_validation",    alias="DB_NAME")
+    db_user: str        = Field(default="postgres",    alias="DB_USER")
+    db_password: str    = Field(default="Agenticai1",           alias="DB_PASSWORD")
     db_pool_size: int   = Field(default=5,            alias="DB_POOL_SIZE")
     db_max_overflow: int= Field(default=10,           alias="DB_MAX_OVERFLOW")
 
@@ -129,6 +129,19 @@ class Settings(BaseSettings):
     s3_artifacts_bucket: str = Field(
         default="agentic-erp-artifacts-241030170015", alias="S3_ARTIFACTS_BUCKET"
     )
+
+    # ── OCI (Legacy — migrated to AWS RDS, kept for backward compat) ──────
+    oci_db_user: Optional[str]         = Field(default=None, alias="OCI_DB_USER")
+    oci_db_password: Optional[str]     = Field(default=None, alias="OCI_DB_PASSWORD")
+    oci_db_dsn: Optional[str]          = Field(default=None, alias="OCI_DB_DSN")
+    oci_wallet_dir: Optional[str]      = Field(default=None, alias="OCI_WALLET_DIR")
+    oci_wallet_password: Optional[str] = Field(default=None, alias="OCI_WALLET_PASSWORD")
+    oci_db_pool_size: Optional[int]    = Field(default=None, alias="OCI_DB_POOL_SIZE")
+    oci_db_max_overflow: Optional[int] = Field(default=None, alias="OCI_DB_MAX_OVERFLOW")
+    oci_compartment_id: Optional[str]  = Field(default=None, alias="OCI_COMPARTMENT_ID")
+    oci_region: Optional[str]          = Field(default=None, alias="OCI_REGION")
+    oci_bucket_name: Optional[str]     = Field(default=None, alias="OCI_BUCKET_NAME")
+    oci_namespace: Optional[str]       = Field(default=None, alias="OCI_NAMESPACE")
 
     # ─────────────────────────────────────────────────────────
     # Computed properties (derived, not from env)
@@ -210,6 +223,7 @@ class Settings(BaseSettings):
         populate_by_name = True
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Ignore any extra env vars not defined as fields
 
 
 # ─────────────────────────────────────────────────────────────
