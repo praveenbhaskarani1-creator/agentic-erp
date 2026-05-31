@@ -480,7 +480,8 @@ def validate_row(fusion_row, tickets, people, project_mapping, ticket_keys_list)
         if is_rm_ticket and 'Release Management' not in proj_name:
             correction = 'Bill to RM project'
         else:
-            correction = f'Ticket is for {_short_project(jira_oracle_project)}'
+            # Show full project name instead of short version
+            correction = f'Ticket is for {jira_oracle_project}'
         return correction, f'Jira: {jira_oracle_project[:60]} | Entry: {proj_name[:40]}', ticket, None, jira_info
 
     # All checks passed
