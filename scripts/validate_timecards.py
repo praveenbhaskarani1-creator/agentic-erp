@@ -27,6 +27,8 @@ from rapidfuzz import process as fuzz_process, fuzz
 
 # ---------------------------------------------------------------------------
 # Column indices (0-based) in Fusion Sheet1
+# Updated: May 2026 — Fee Arrangement Type added at column R (17)
+# This shifted all columns after it down by 1
 # ---------------------------------------------------------------------------
 F_PERIOD    = 0   # Timecard Period
 F_EMP_NAME  = 1   # Employee Name
@@ -40,20 +42,23 @@ F_JOB       = 8   # Person Job
 F_EXEMPT    = 9   # Exempt / Non Exempt
 F_DEPT      = 10  # Department
 F_MGR       = 11  # Employee Manager Name
-F_TA_MGR    = 12  # Time and Absence Manager
+F_TA_MGR    = 12  # Time and Absence Manager Name
 F_PM        = 13  # Project Manager Name
 F_PROJ_BU   = 14  # Project Business Unit
 F_PROJ_NUM  = 15  # Project Number
 F_PROJ_NAME = 16  # Project Name (Customer/Job)
-F_TASK_NUM  = 17  # Task Number
-F_TASK_NAME = 18  # Task Name
-F_BILLABLE  = 19  # Billable Task
-F_PROJ_TYPE = 20  # Project Type
-F_PAY_TYPE  = 21  # Payroll Time Type
-F_HOURS     = 26  # Hours Worked
-F_ABS_HRS   = 27  # Absence Hours
-F_TOTAL_HRS = 28  # Total Hours
-F_MEMO      = 29  # Comments (by line)
+F_FEE_ARR   = 17  # Fee Arrangement Type (NEW)
+F_TASK_NUM  = 18  # Task Number (was 17)
+F_TASK_NAME = 19  # Task Name (was 18)
+F_BILLABLE  = 20  # Billable Task (was 19)
+F_PROJ_TYPE = 21  # Project Type (was 20)
+F_PAY_TYPE  = 22  # Payroll Time Type (was 21)
+# Columns 23-25: State, County, City (new)
+# Column 26: Absence (new)
+F_HOURS     = 27  # Hours Worked (was 26)
+F_ABS_HRS   = 28  # Absence Hours (was 27)
+F_TOTAL_HRS = 29  # Total Hours (was 28)
+F_MEMO      = 30  # Comments (by line) (was 29) ← TICKET EXTRACTION
 
 # ---------------------------------------------------------------------------
 # Ticket extraction — replicates the Excel formula exactly
