@@ -140,18 +140,47 @@ def load_jira_lookups(jira_path: str):
     # --- Tickets sheet (required) ---
     ws_tickets = wb['Tickets']
     tickets = {}
+
+    # Build header map to find columns dynamically
+    headers = None
+    col_map = {}
+
     for i, row in enumerate(ws_tickets.iter_rows(values_only=True)):
+        # Parse header row (first row)
         if i == 0:
+            headers = [str(h).strip().lower() if h else '' for h in row]
+            # Find key columns dynamically
+            for col_idx, header in enumerate(headers):
+                if 'key' in header:
+                    col_map['key'] = col_idx
+                elif 'issue type' in header:
+                    col_map['issue_type'] = col_idx
+                elif 'oracle' in header and 'project' in header:
+                    col_map['oracle_project'] = col_idx
+                elif 'jira' in header and 'project' in header:
+                    col_map['jira_project'] = col_idx
+                elif 'label' in header:
+                    col_map['labels'] = col_idx
+                elif 'parent' in header:
+                    col_map['parent'] = col_idx
             continue
-        key = row[0]
+
+        # Skip if we couldn't find key column
+        if 'key' not in col_map:
+            continue
+
+        # Extract key from mapped column
+        key = row[col_map['key']] if col_map['key'] < len(row) else None
         if not key:
             continue
+
+        # Extract other fields using column map
         tickets[str(key).strip()] = {
-            'oracle_project': str(row[2]).strip() if len(row) > 2 and row[2] else '',
-            'jira_project':   str(row[3]).strip() if len(row) > 3 and row[3] else '',
-            'labels':         str(row[4]).strip() if len(row) > 4 and row[4] else '',
-            'issue_type':     str(row[5]).strip() if len(row) > 5 and row[5] else '',
-            'parent':         str(row[6]).strip() if len(row) > 6 and row[6] else '',
+            'oracle_project': str(row[col_map.get('oracle_project', 99)]).strip() if col_map.get('oracle_project', 99) < len(row) and row[col_map.get('oracle_project', 99)] else '',
+            'jira_project':   str(row[col_map.get('jira_project', 99)]).strip() if col_map.get('jira_project', 99) < len(row) and row[col_map.get('jira_project', 99)] else '',
+            'labels':         str(row[col_map.get('labels', 99)]).strip() if col_map.get('labels', 99) < len(row) and row[col_map.get('labels', 99)] else '',
+            'issue_type':     str(row[col_map.get('issue_type', 99)]).strip() if col_map.get('issue_type', 99) < len(row) and row[col_map.get('issue_type', 99)] else '',
+            'parent':         str(row[col_map.get('parent', 99)]).strip() if col_map.get('parent', 99) < len(row) and row[col_map.get('parent', 99)] else '',
         }
 
     # --- People sheet (optional) ---
