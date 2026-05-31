@@ -590,11 +590,11 @@ def run(fusion_path: str, jira_path: str = None, output_path: str = None, pm_fil
 
     ticket_keys_list = list(tickets.keys())
 
-    # Auto-infer project mappings from ticket data (explicit Project Edits overrides)
-    auto_mapping = build_auto_project_mapping(fusion_rows, tickets)
-    merged_project_mapping = {**auto_mapping, **project_mapping}
-    if auto_mapping:
-        print(f"  Project mappings: {len(auto_mapping)} auto-inferred, {len(project_mapping)} explicit")
+    # Skip auto-inferred mappings — they cause false positives when tickets are wrongly extracted
+    # Only use explicit Project Edits mappings if provided
+    merged_project_mapping = project_mapping
+    if project_mapping:
+        print(f"  Project mappings: {len(project_mapping)} explicit")
 
     print(f"\nRunning validation on {len(fusion_rows)} rows...")
 
